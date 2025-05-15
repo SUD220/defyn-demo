@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Defyn - Cyber Threat Help</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background-color: #0e101c;
+      color: #f0f0f0;
+      scroll-behavior: smooth;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    body.light-mode {
+      background-color: #ffffff;
+      color: #000000;
+    }
+    header {
+      padding: 1.5rem 10%;
+      background: #1a1d2e;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: #58d68d;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    header h1 i {
+      font-size: 1.2rem;
+    }
+    nav a {
+      color: #f0f0f0;
+      margin-left: 2rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #58d68d;
+    }
+    .toggle-mode {
+      cursor: pointer;
+      margin-left: 1rem;
+      font-size: 1.2rem;
+    }
+    .hero {
+      text-align: center;
+      padding: 6rem 2rem;
+      background-image: linear-gradient(
+          rgba(0, 0, 0, 0.5),
+          rgba(0, 0, 0, 0.7)
+        ),
+        url("https://cdn.pixabay.com/photo/2020/05/25/08/54/banner-5217683_1280.jpg");
+      background-size: cover;
+      background-position: center;
+      color: white;
+    }
+    .hero h2 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      animation: fadeIn 1.5s ease;
+    }
+    .hero p {
+      font-size: 1.25rem;
+      max-width: 800px;
+      margin: 0 auto;
+      animation: fadeIn 2s ease;
+    }
+    .btn {
+      margin-top: 2rem;
+      padding: 0.8rem 2rem;
+      background: #58d68d;
+      color: #0e101c;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s;
+      display: inline-block;
+    }
+    .btn:hover {
+      background: #48be7d;
+    }
+    .section {
+      padding: 4rem 10%;
+      text-align: center;
+      background-color: #141624;
+    }
+    .section:nth-of-type(even) {
+      background-color: #1a1d2e;
+    }
+    .section h3 {
+      color: #58d68d;
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+      max-width: 800px;
+      margin: auto;
+      text-align: left;
+    }
+    ul li::before {
+      content: "\f058";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      margin-right: 0.5rem;
+      color: #58d68d;
+    }
+    ul li {
+      margin: 0.8rem 0;
+      line-height: 1.6;
+    }
+    .img-center {
+      display: block;
+      margin: 2rem auto;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .section p {
+      max-width: 800px;
+      margin: 1rem auto;
+      line-height: 1.7;
+      font-size: 1.1rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 2rem auto;
+    }
+    .tool-card {
+      background-color: #1a1d2e;
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s;
+    }
+    .tool-card:hover {
+      transform: translateY(-5px);
+    }
+    .tool-card h4 {
+      margin-bottom: 0.5rem;
+      color: #58d68d;
+    }
+    .tool-card p {
+      font-size: 0.95rem;
+      color: #ccc;
+    }
+    .tool-card a {
+      margin-top: 1rem;
+      display: inline-block;
+      color: #58d68d;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 10%;
+      background: #1a1d2e;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    lottie-player {
+      width: 300px;
+      margin: 2rem auto;
+      display: block;
+    }
+    /* Responsive CSS for mobile devices */
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem 5%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.8rem;
+      }
+      header h1 {
+        font-size: 1.5rem;
+      }
+      nav {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
+      nav a {
+        margin: 0.5rem 0.8rem;
+        font-size: 0.9rem;
+      }
+      .hero {
+        padding: 4rem 1rem;
+      }
+      .hero h2 {
+        font-size: 2rem;
+      }
+      .hero p {
+        font-size: 1rem;
+        padding: 0 1rem;
+      }
+      .section {
+        padding: 2rem 5%;
+      }
+      .section h3 {
+        font-size: 1.8rem;
+      }
+      ul {
+        font-size: 0.95rem;
+      }
+      .tools-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0 1rem;
+      }
+      .tool-card {
+        padding: 1rem;
+      }
+      footer {
+        padding: 1.5rem 5%;
+        font-size: 0.85rem;
+      }
+      lottie-player {
+        width: 250px;
+      }
+      .btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
+<body>
+  <header>
+    <a href="#home" class="logo-link" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
+      <img src="defyn.png" alt="Defyn" id="logo-img" style="height:40px; width:auto;" />
+      <h1>Defyn</h1>
+    </a>
+    <nav>
+      <a href="#consult">Consultation</a>
+      <a href="#precautions">Precautions</a>
+      <a href="#faq">FAQ</a>
+      <a href="#tools">Free Tools</a>
+      <a href="#blog">Blog</a>
+      <a href="#contact">Contact</a>
+      <span class="toggle-mode" onclick="toggleMode()"><i class="fas fa-adjust"></i></span>
+    </nav>
+  </header>
+
+  <section class="hero" id="home">
+    <h2>Helping You Fight Back Against Cyber Threats</h2>
+    <p>
+      Are you being hacked, blackmailed, or harassed online? We provide fast, private consultation and
+      expert advice.
+    </p>
+    <a class="btn" href="https://wa.me/918511050711" target="_blank">Get Help on WhatsApp</a>
+  </section>
+
+  <section class="section" id="consult">
+    <script
+      src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+      type="module"
+    ></script>
+
+    <dotlottie-player
+      src="https://lottie.host/66e38b8a-7e91-4bd2-b3b6-384f6c91294f/2UekaJxzek.lottie"
+      background="transparent"
+      speed="1"
+      style="width: 1250px; height: 300px"
+      loop
+      autoplay
+    ></dotlottie-player>
+    <h3>Consultation</h3>
+    <p>Fill out our secure form and get confidential help from our cyber security experts.</p>
+    <a
+      href="https://docs.google.com/forms/d/e/1FAIpQLScwkVxXhTMVxsaSIRDwii7Hfr01D-JOgOGaqSvK5ioMNhtyFg/viewform?usp=sf_link"
+      target="_blank"
+      class="btn"
+      >Consult Now</a
+    >
+  </section>
+
+  <section class="section" id="precautions">
+    <h3>Precautions</h3>
+    <ul>
+      <li>Use strong, unique passwords and update them regularly. </li>
+      <li>Enable two-factor authentication on all important accounts. </li>
+      <li>Be cautious of phishing emails and suspicious links. </li>
+      <li>Keep your software and antivirus updated. </li>
+      <li>Regularly backup your important data securely. </li>
+    </ul>
+  </section>
+
+  <section class="section" id="faq">
+    <lottie-player src="https://lottie.host/c6b5a849-9162-4acd-9eca-fea60a9aade7/A4C3F6YGyY.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
+    <h3>Frequently Asked Questions</h3>
+    <ul>
+      <li><strong>What should I do if I’m being blackmailed online?</strong> Report immediately to authorities, avoid paying, and consult experts.</li>
+      <li><strong>How can I protect my accounts from hacking?</strong> Use strong passwords, enable two-factor authentication, and stay alert for phishing attempts.</li>
+      <li><strong>Is my data safe if I report an incident?</strong> Yes, your privacy is a priority and reports are confidential.</li>
+      <li><strong>How quickly can I expect help after consulting?</strong> Most cases receive response within 24-48 hours.</li>
+    </ul>
+  </section>
+
+  <section class="section" id="tools">
+    <h3>Free Tools</h3>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <h4>Fake Email Generator</h4>
+        <p>Create a disposable email address for privacy and spam prevention.</p>
+        <a href="https://temp-mail.org" target="_blank">Use Tool</a>
+      </div>
+      <div class="tool-card">
+        <h4>Temporary WhatsApp</h4>
+        <p>Secure your chats with temporary WhatsApp numbers.</p>
+        <a href="https://receive-smss.com" target="_blank">Use Tool</a>
+      </div>
+      <div class="tool-card">
+        <h4>Metadata Remover</h4>
+        <p>Remove hidden metadata from your files to protect your privacy.</p>
+        <a href="https://www.metadata2go.com" target="_blank">Use Tool</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="blog">
+    <script
+      src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+      type="module"
+    ></script>
+
+    <dotlottie-player
+      src="https://lottie.host/7169efbe-a452-46ad-bbaf-095f4a3397ce/v7EGHhDFpt.lottie"
+      background="transparent"
+      speed="1"
+      style="width: 1200px; height: 300px"
+      loop
+      autoplay
+    ></dotlottie-player>
+    <h3>Blog</h3>
+    <p>Coming soon...</p>
+  </section>
+
+  <section class="section" id="contact">
+    <h3>Contact Us</h3>
+    <p>Have questions or need immediate help? Reach out to us securely.</p>
+    <a
+      href="https://docs.google.com/forms/d/e/1FAIpQLSfatWAAsScKdMAb1YhOYmE3wD_TZM26reBZBmC4QTAGA863hA/viewform?usp=header"
+      target="_blank"
+      class="btn"
+      >Contact Form</a
+    >
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Defyn. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function toggleMode() {
+      document.body.classList.toggle("light-mode");
+    }
+  </script>
+</body>
+</html>
+"""
