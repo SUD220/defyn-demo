@@ -1,377 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Defyn - Cyber Threat Help</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      font-family: "Inter", sans-serif;
-      background-color: #000000;
-      color: #f5f5f5;
-      scroll-behavior: smooth;
-      transition: background-color 0.3s, color 0.3s;
-    }
-    body.light-mode {
-      background-color: #ffffff;
-      color: #111111;
-    }
-    header {
-      padding: 1.5rem 10%;
-      background: #111111;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 0 8px #ffffff33;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      text-shadow: 0 0 6px #ffffff88;
-    }
-    nav a {
-      color: #f5f5f5;
-      margin-left: 2rem;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s;
-      font-size: 1rem;
-    }
-    nav a:hover {
-      color: #ffffffcc;
-      text-shadow: 0 0 4px #ffffff88;
-    }
-    .toggle-mode {
-      cursor: pointer;
-      margin-left: 1rem;
-      font-size: 1.2rem;
-      color: #f5f5f5;
-      transition: color 0.3s;
-    }
-    .toggle-mode:hover {
-      color: #ffffffcc;
-      text-shadow: 0 0 4px #ffffff88;
-    }
-    .hero {
-      text-align: center;
-      padding: 6rem 2rem;
-      background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)),
-        url("https://cdn.pixabay.com/photo/2020/05/25/08/54/banner-5217683_1280.jpg") no-repeat center/cover;
-      color: #ffffff;
-      text-shadow: 0 0 6px #ffffff88;
-    }
-    .hero h2 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      font-weight: 800;
-      animation: fadeInUp 1.5s ease forwards;
-      opacity: 0;
-      text-shadow: 0 0 8px #ffffffaa;
-    }
-    .hero p {
-      font-size: 1.25rem;
-      max-width: 700px;
-      margin: 0 auto;
-      animation: fadeInUp 2s ease forwards;
-      opacity: 0;
-      text-shadow: 0 0 6px #ffffff88;
-    }
-    .btn {
-      margin-top: 2rem;
-      padding: 0.8rem 2rem;
-      background: #ffffff;
-      color: #000000;
-      border: none;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.3s, box-shadow 0.3s;
-      display: inline-block;
-      animation: fadeInUp 2.5s ease forwards;
-      opacity: 0;
-      box-shadow: 0 0 8px #ffffff66;
-    }
-    .btn:hover {
-      background: #e0e0e0;
-      box-shadow: 0 0 15px #ffffffaa;
-      color: #000;
-    }
-    .section {
-      padding: 4rem 10%;
-      text-align: center;
-      background-color: #111111;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-      color: #f5f5f5;
-      text-shadow: 0 0 3px #ffffff44;
-    }
-    .section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .section:nth-of-type(even) {
-      background-color: #1a1a1a;
-    }
-    .section h3 {
-      color: #ffffff;
-      font-size: 2.2rem;
-      margin-bottom: 1.5rem;
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      text-shadow: 0 0 6px #ffffffaa;
-    }
-    ul {
-      list-style: none;
-      padding-left: 0;
-      max-width: 800px;
-      margin: auto;
-      text-align: left;
-      color: #ddd;
-      text-shadow: 0 0 2px #ffffff33;
-    }
-    ul li::before {
-      content: "\f058";
-      font-family: "Font Awesome 6 Free";
-      font-weight: 900;
-      margin-right: 0.5rem;
-      color: #ffffffcc;
-      text-shadow: 0 0 4px #ffffff55;
-    }
-    ul li {
-      margin: 0.8rem 0;
-      line-height: 1.6;
-      font-size: 1.1rem;
-    }
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      max-width: 1000px;
-      margin: 2rem auto 0;
-    }
-    .tool-card {
-      background-color: #000000;
-      padding: 1.8rem 1.5rem;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 0 10px #ffffff44;
-      transition: transform 0.3s, box-shadow 0.3s;
-      color: #f5f5f5;
-      text-shadow: 0 0 2px #ffffff33;
-    }
-    .tool-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 0 20px #ffffffaa;
-      color: #ffffff;
-      text-shadow: 0 0 6px #ffffffcc;
-    }
-    .tool-card h4 {
-      margin-bottom: 0.8rem;
-      color: #ffffff;
-      font-weight: 700;
-      font-size: 1.3rem;
-      letter-spacing: 0.8px;
-      text-shadow: 0 0 6px #ffffffcc;
-    }
-    .tool-card p {
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      color: #ddd;
-      text-shadow: none;
-    }
-    .tool-card .price {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: #eee;
-      margin-bottom: 1rem;
-      text-shadow: none;
-    }
-    /* Removed buttons from tool-card */
-    footer {
-      text-align: center;
-      padding: 2rem 10%;
-      background: #111111;
-      color: #f5f5f5;
-      font-size: 0.9rem;
-      letter-spacing: 0.5px;
-      text-shadow: 0 0 3px #ffffff33;
-    }
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-    }
-    lottie-player {
-      width: 300px;
-      margin: 2rem auto;
-      display: block;
-    }
-    /* Responsive CSS for mobile devices */
-    @media (max-width: 768px) {
-      header {
-        padding: 1rem 5%;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.8rem;
-      }
-      header h1 {
-        font-size: 1.5rem;
-      }
-      nav {
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-      }
-      nav a {
-        margin: 0.5rem 0.8rem;
-        font-size: 0.9rem;
-      }
-      .hero {
-        padding: 4rem 1rem;
-      }
-      .hero h2 {
-        font-size: 2rem;
-      }
-      .hero p {
-        font-size: 1rem;
-        padding: 0 1rem;
-      }
-      .section {
-        padding: 2rem 5%;
-      }
-      .section h3 {
-        font-size: 1.8rem;
-      }
-      ul {
-        font-size: 1rem;
-      }
-      .tools-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        padding: 0 1rem;
-      }
-      .tool-card {
-        padding: 1.2rem;
-      }
-      footer {
-        padding: 1.5rem 5%;
-        font-size: 0.85rem;
-      }
-      lottie-player {
-        width: 250px;
-      }
-      .btn {
-        padding: 0.7rem 1.5rem;
-        font-size: 0.9rem;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defyn Cybersecurity</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inconsolata:wght@400;700&display=swap');
+
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #1a1a1a; /* dark grey */
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+  }
+
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 90%;
+  }
+
+  .logo-pc {
+    width: 100px;
+    margin-bottom: 15px;
+    transition: filter 0.3s;
+    cursor: pointer;
+  }
+
+  .logo-pc svg {
+    width: 100%;
+    height: auto;
+    fill: #ff3333;
+    transition: all 0.3s ease;
+  }
+
+  .logo-pc:hover svg {
+    filter: brightness(1.5) drop-shadow(0 0 5px #ff3333);
+  }
+
+  .logo-text {
+    font-size: 3rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .logo-text:hover {
+    animation: glitch 0.5s infinite;
+  }
+
+  @keyframes glitch {
+    0% { text-shadow: 2px 0 red, -2px 1px cyan; transform: translate(0px, 0px);}
+    20% { text-shadow: -2px 1px red, 2px -1px cyan; transform: translate(1px, -1px);}
+    40% { text-shadow: 2px -1px red, -2px 2px cyan; transform: translate(-1px, 1px);}
+    60% { text-shadow: -1px 2px red, 1px -2px cyan; transform: translate(1px, 0);}
+    80% { text-shadow: 1px -2px red, -1px 2px cyan; transform: translate(-1px, 0);}
+    100% { text-shadow: 2px 0 red, -2px 1px cyan; transform: translate(0px, 0px);}
+  }
+
+  h1 {
+    font-weight: 400;
+    font-size: 1.8rem;
+    margin: 0.5rem 0;
+    color: #eaeaea;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .contact-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #ff3333;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-family: 'Inconsolata', monospace;
+    font-weight: bold;
+    z-index: 2;
+    transition: transform 0.2s;
+  }
+
+  .contact-button:hover {
+    transform: scale(1.1);
+  }
+
+  .online-counter {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.9rem;
+    color: #ff3333;
+    z-index: 2;
+  }
+
+  footer {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.8rem;
+    color: #888;
+    letter-spacing: 1px;
+    z-index: 2;
+  }
+
+  footer span {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 1.3rem; }
+    .logo-text { font-size: 2rem; }
+    .logo-pc { width: 80px; }
+    .contact-button { padding: 8px 12px; font-size: 0.8rem; }
+  }
+</style>
 </head>
 <body>
-  <header>
-    <a href="#home" class="logo-link" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
-      <img src="defyn.png" alt="Defyn" id="logo-img" style="height:40px; width:auto;" />
-      <h1>Defyn</h1>
-    </a>
-    <nav>
-      <a href="#about">About Us</a>
-      <a href="#services">Services</a>
-      <a href="#contact">Contact Us</a>
-      <span class="toggle-mode" onclick="toggleMode()"><i class="fas fa-adjust"></i></span>
-    </nav>
-  </header>
+<canvas id="glitchSquares"></canvas>
 
-  <section class="hero" id="home">
-    <h2>Protecting Your Digital World with Defyn</h2>
-    <p>Stay ahead of cyber threats with our expert VAPT services, professional training, and awareness sessions tailored to keep your business and team secure.</p>
-  </section>
+<div class="content">
+  <div class="logo-pc">
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="4" width="56" height="40" rx="2" ry="2" stroke="#ff3333" stroke-width="2" fill="none"/>
+      <rect x="16" y="46" width="32" height="6" fill="#ff3333" rx="1"/>
+      <circle cx="32" cy="18" r="5"/>
+      <path d="M24 28 Q32 18, 40 28 Q32 36, 24 28 Z" fill="#ff3333"/>
+    </svg>
+  </div>
 
-  <section class="section" id="about">
-    <h3>About Us</h3>
-    <p>
-      Defyn is dedicated to empowering individuals and organizations against cyber threats. Our team of experts offers tailored solutions to secure your digital life with confidentiality and professionalism.
-    </p>
-  </section>
+  <div class="logo-text">DEFYN</div>
+  <h1>Securing your digital world with <b>VAPT</b>, <b>Training</b> & <b>Awareness Programs</b>.</h1>
+</div>
 
-  <section class="section" id="services">
-    <h3>Services</h3>
-    <div class="tools-grid">
-      <div class="tool-card">
-        <h4>Vulnerability Assessment & Penetration Testing (VAPT)</h4>
-        <p>Identify and fix security weaknesses before attackers exploit them.</p>
-        <p class="price">Starting at Rs 35000</p>
-      </div>
-      <div class="tool-card">
-        <h4>Cybersecurity Training</h4>
-        <p>Comprehensive training programs to equip your team with essential security skills.</p>
-        <p class="price">From RS 15000 to RS 45,000</p>
-      </div>
-      <div class="tool-card">
-        <h4>Awareness Sessions</h4>
-        <p>Interactive sessions to raise awareness about cyber threats and best practices.</p>
-        <p class="price">Packages from RS 35000 to RS 45000</p>
-      </div>
-    </div>
-  </section>
+<button class="contact-button" id="contactBtn">Contact Us</button>
+<div class="online-counter" id="onlineCounter">123 users online</div>
 
-  <section class="section" id="contact">
-    <h3>Contact Us</h3>
-    <p>Contact us for booking and inquiries.</p>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfatWAAsScKdMAb1YhOYmE3wD_TZM26reBZBmC4QTAGA863hA/viewform?usp=header" target="_blank" class="btn">Contact Form</a>
-  </section>
+<footer>
+  <span>VAPT</span>
+  <span>Cybersecurity</span>
+  <span>Awareness</span>
+  <span>© COPYRIGHT 2025 DEFYN</span>
+</footer>
 
-  <footer>
-    <p>&copy; 2025 Defyn. All rights reserved.</p>
-  </footer>
+<script>
+// Contact button
+document.getElementById('contactBtn').addEventListener('click', () => {
+  window.open('https://forms.gle/r8uKGkfLShxHwoGg7', '_blank');
+});
 
-  <script>
-    // Toggle light/dark mode
-    function toggleMode() {
-      document.body.classList.toggle("light-mode");
-    }
+// Canvas glitch squares trail
+const canvas = document.getElementById('glitchSquares');
+const ctx = canvas.getContext('2d');
 
-    // Fade in sections on scroll
-    const sections = document.querySelectorAll('.section, .hero h2, .hero p');
-    const options = {
-      threshold: 0.1
-    };
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, options);
+let w = canvas.width = window.innerWidth;
+let h = canvas.height = window.innerHeight;
 
-    sections.forEach(section => {
-      observer.observe(section);
-    });
-  </script>
+window.addEventListener('resize', () => {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+});
+
+const squares = [];
+
+window.addEventListener('mousemove', e => {
+  squares.push({
+    x: e.clientX + (Math.random() * 7 - 2),
+    y: e.clientY + (Math.random() * 7 - 2),
+    size: Math.random() * 6 + 2,
+    alpha: 1
+  });
+  if (squares.length > 200) squares.shift();
+});
+
+function animate() {
+  ctx.clearRect(0, 0, w, h);
+  for (let i = 0; i < squares.length; i++) {
+    const sq = squares[i];
+    ctx.fillStyle = `rgba(255,0,0,${sq.alpha})`;
+    ctx.fillRect(sq.x, sq.y, sq.size, sq.size);
+    sq.alpha -= 0.01; // slower fade
+  }
+  for (let i = squares.length - 1; i >= 0; i--) {
+    if (squares[i].alpha <= 0) squares.splice(i, 1);
+  }
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+// Online users simulation
+const onlineCounter = document.getElementById('onlineCounter');
+setInterval(() => {
+  const users = Math.floor(Math.random() * 50 + 100);
+  onlineCounter.textContent = `${users} users online`;
+}, 3000);
+</script>
 </body>
 </html>
