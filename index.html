@@ -3,7 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Defyn Cybersecurity</title>
+
+<title>Defyn Cybersecurity | Ethical Hacking, VAPT & Security Awareness</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="Defyn Cybersecurity provides professional Vulnerability Assessment, Penetration Testing (VAPT), and Security Awareness Training to secure your digital ecosystem.">
+<meta name="keywords" content="cybersecurity, ethical hacking, VAPT, penetration testing, Defyn, security awareness, cybersecurity company India, website security">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://defyn.site/">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:title" content="Defyn Cybersecurity | Protect Your Digital World">
+<meta property="og:description" content="Next-gen cybersecurity team offering VAPT, Ethical Hacking, and Awareness Programs.">
+<meta property="og:url" content="https://defyn.site/">
+<meta property="og:site_name" content="Defyn Cybersecurity">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://defyn.site/logo.png">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Defyn Cybersecurity | Ethical Hacking & VAPT Experts">
+<meta name="twitter:description" content="Defyn Cybersecurity — specialized in ethical hacking, VAPT, and awareness training to secure organizations.">
+<meta name="twitter:image" content="https://defyn.site/logo.png">
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-V0D7V5VBHE"></script>
@@ -12,6 +33,19 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-V0D7V5VBHE');
+</script>
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Defyn Cybersecurity",
+  "url": "https://defyn.site",
+  "logo": "https://defyn.site/logo.png",
+  "description": "Defyn Cybersecurity offers VAPT, Ethical Hacking, and Cybersecurity Awareness services to protect businesses from cyber threats.",
+  "sameAs": []
+}
 </script>
 
 <style>
@@ -221,65 +255,20 @@
     transform: translateX(5px);
   }
 
-  /* Mobile friendly adjustments */
   @media (max-width: 900px) {
-    body {
-      overflow-y: auto;
-      height: auto;
-      padding-bottom: 80px;
-    }
-
-    .sections {
-      flex-direction: column;
-      align-items: center;
-      width: 95%;
-    }
-
-    .about, .services {
-      width: 100%;
-    }
-
-    .logo-text {
-      font-size: 2.2rem;
-    }
-
-    h1 {
-      font-size: 1.2rem;
-      line-height: 1.4;
-    }
-
-    .contact-button {
-      top: 10px;
-      right: 10px;
-      padding: 8px 12px;
-      font-size: 0.8rem;
-    }
-
-    .blinker-square {
-      top: 10px;
-      left: 10px;
-      width: 10px;
-      height: 10px;
-    }
-
-    .online-counter {
-      top: 10px;
-      left: 28px;
-      font-size: 0.8rem;
-    }
-
-    footer {
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.7rem;
-      bottom: 10px;
-    }
+    body { overflow-y: auto; height: auto; padding-bottom: 80px; }
+    .sections { flex-direction: column; align-items: center; width: 95%; }
+    .about, .services { width: 100%; }
+    .logo-text { font-size: 2.2rem; }
+    h1 { font-size: 1.2rem; line-height: 1.4; }
+    .contact-button { top: 10px; right: 10px; padding: 8px 12px; font-size: 0.8rem; }
+    .blinker-square { top: 10px; left: 10px; width: 10px; height: 10px; }
+    .online-counter { top: 10px; left: 28px; font-size: 0.8rem; }
+    footer { flex-direction: column; align-items: center; gap: 5px; font-size: 0.7rem; bottom: 10px; }
   }
 </style>
 </head>
 <body>
-
 <canvas id="bgCanvas"></canvas>
 
 <div class="content">
@@ -297,7 +286,6 @@
       <path d="M24 28 Q32 18, 40 28 Q32 36, 24 28 Z" fill="url(#gradient)"/>
     </svg>
   </div>
-
   <div class="logo-text">DEFYN</div>
   <h1 id="typed-text"></h1>
 </div>
@@ -305,11 +293,7 @@
 <div class="sections">
   <div class="about">
     <h2>About Us</h2>
-    <p>
-      Defyn is a next-gen cybersecurity organization dedicated to protecting digital ecosystems.
-      Our team blends ethical hacking, automation, and innovation to identify and neutralize
-      vulnerabilities before attackers can exploit them.
-    </p>
+    <p>Defyn is a next-gen cybersecurity organization dedicated to protecting digital ecosystems. Our team blends ethical hacking, automation, and innovation to identify and neutralize vulnerabilities before attackers can exploit them.</p>
   </div>
 
   <div class="services">
@@ -339,8 +323,6 @@
 document.getElementById('contactBtn').addEventListener('click', () => {
   window.open('https://forms.gle/r8uKGkfLShxHwoGg7', '_blank');
 });
-
-// typed text
 const text = "Securing your digital world with VAPT, Training & Awareness Programs.";
 const typedEl = document.getElementById('typed-text');
 let index = 0;
@@ -352,36 +334,27 @@ function type() {
   }
 }
 type();
-
-// online counter
 const onlineCounter = document.getElementById('onlineCounter');
 setInterval(() => {
   const users = Math.floor(Math.random() * 50 + 100);
   onlineCounter.textContent = `${users} users online`;
 }, 3000);
-
-// background canvas particles and mouse trail
 const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
 let w = canvas.width = window.innerWidth;
 let h = canvas.height = window.innerHeight;
-
 window.addEventListener('resize', () => { w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; });
-
 const particles = [];
 for(let i=0;i<60;i++){
   particles.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,vx:(Math.random()-0.5)*0.2,vy:(Math.random()-0.5)*0.2});
 }
-
 const squares = [];
 window.addEventListener('mousemove', e=>{
   squares.push({x:e.clientX + (Math.random()*7-3), y:e.clientY + (Math.random()*7-3), size: Math.random()*6+2, alpha:1, color: Math.random()<0.5?'#ff3333':'#3333ff'});
   if(squares.length>200) squares.shift();
 });
-
 function animate(){
   ctx.clearRect(0,0,w,h);
-  // particles
   for(let p of particles){
     ctx.beginPath();
     ctx.fillStyle = Math.random()<0.5?'rgba(255,0,0,0.7)':'rgba(0,0,255,0.7)';
@@ -391,7 +364,6 @@ function animate(){
     if(p.x<0||p.x>w)p.vx*=-1;
     if(p.y<0||p.y>h)p.vy*=-1;
   }
-  // particle lines
   for(let i=0;i<particles.length;i++){
     for(let j=i+1;j<particles.length;j++){
       const p1=particles[i], p2=particles[j];
@@ -406,7 +378,6 @@ function animate(){
       }
     }
   }
-  // mouse trail
   for(let sq of squares){
     ctx.fillStyle=sq.color;
     ctx.globalAlpha=sq.alpha;
