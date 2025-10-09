@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Defyn Cybersecurity</title>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V0D7V5VBHE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-V0D7V5VBHE');
+</script>
+
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Playfair+Display:wght@400;700&family=Inconsolata:wght@400;700&display=swap');
 
@@ -64,7 +74,7 @@
     letter-spacing: 3px;
     margin-bottom: 1rem;
     cursor: pointer;
-    font-family: 'Audiowide', cursive; /* stylish font */
+    font-family: 'Audiowide', cursive;
     transition: all 0.2s ease;
   }
 
@@ -106,7 +116,6 @@
 
   .contact-button:hover { transform: scale(1.1); }
 
-  /* Neon white blinking square */
   .blinker-square {
     position: absolute;
     top: 20px;
@@ -127,7 +136,7 @@
   .online-counter {
     position: absolute;
     top: 20px;
-    left: 42px; /* next to blinker */
+    left: 42px;
     font-family: 'Inconsolata', monospace;
     font-size: 0.9rem;
     color: #fff;
@@ -212,11 +221,61 @@
     transform: translateX(5px);
   }
 
+  /* Mobile friendly adjustments */
   @media (max-width: 900px) {
-    .sections { flex-direction: column; align-items: center; }
-    .about, .services { width: 90%; }
-  }
+    body {
+      overflow-y: auto;
+      height: auto;
+      padding-bottom: 80px;
+    }
 
+    .sections {
+      flex-direction: column;
+      align-items: center;
+      width: 95%;
+    }
+
+    .about, .services {
+      width: 100%;
+    }
+
+    .logo-text {
+      font-size: 2.2rem;
+    }
+
+    h1 {
+      font-size: 1.2rem;
+      line-height: 1.4;
+    }
+
+    .contact-button {
+      top: 10px;
+      right: 10px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+    }
+
+    .blinker-square {
+      top: 10px;
+      left: 10px;
+      width: 10px;
+      height: 10px;
+    }
+
+    .online-counter {
+      top: 10px;
+      left: 28px;
+      font-size: 0.8rem;
+    }
+
+    footer {
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.7rem;
+      bottom: 10px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -349,8 +408,10 @@ function animate(){
   }
   // mouse trail
   for(let sq of squares){
-    ctx.fillStyle=`${sq.color.replace('1)',''+sq.alpha+')')}`;
+    ctx.fillStyle=sq.color;
+    ctx.globalAlpha=sq.alpha;
     ctx.fillRect(sq.x,sq.y,sq.size,sq.size);
+    ctx.globalAlpha=1;
     sq.alpha-=0.02;
   }
   for(let i=squares.length-1;i>=0;i--){if(squares[i].alpha<=0)squares.splice(i,1);}
