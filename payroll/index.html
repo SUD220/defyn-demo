@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Defyn Payroll | HR Salary Suite</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1120;
+      --panel: rgba(15, 23, 42, 0.84);
+      --panel-strong: #111827;
+      --line: #263244;
+      --muted: #94a3b8;
+      --text: #e5edf8;
+      --blue: #38bdf8;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #ef4444;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.14), transparent 26rem),
+        linear-gradient(135deg, #09111f 0%, #0f172a 54%, #111827 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, input, select { transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease, transform 0.16s ease; }
+    button:active { transform: translateY(1px); }
+
+    .shell {
+      width: min(1320px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 24px 60px rgba(2, 6, 23, 0.28);
+    }
+
+    .field {
+      width: 100%;
+      min-height: 42px;
+      background: #0f1b2e;
+      border: 1px solid #304158;
+      border-radius: 7px;
+      color: var(--text);
+      padding: 9px 11px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .field:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.16);
+    }
+
+    .field:disabled {
+      cursor: not-allowed;
+      color: #94a3b8;
+      background: #101827;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      padding: 9px 13px;
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-green { background: #15803d; color: white; }
+    .btn-green:hover { background: #166534; }
+    .btn-indigo { background: #4f46e5; color: white; }
+    .btn-indigo:hover { background: #4338ca; }
+    .btn-muted { background: #1e293b; color: #dbeafe; border-color: #334155; }
+    .btn-muted:hover { background: #263449; }
+    .btn-icon {
+      width: 34px;
+      min-height: 34px;
+      padding: 0;
+      border-radius: 7px;
+      background: #162234;
+      border: 1px solid #2f4058;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 16px;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .title-bar {
+      width: 4px;
+      height: 20px;
+      border-radius: 999px;
+      background: var(--blue);
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 7px;
+      color: #b6c4d7;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .stat {
+      border-left: 1px solid var(--line);
+      padding-left: 18px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 4px;
+      color: #f8fafc;
+      font-size: 20px;
+      line-height: 1.1;
+    }
+
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: #d6e2f1;
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle input {
+      width: 17px;
+      height: 17px;
+      accent-color: #38bdf8;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #475569 #111827;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 820px;
+    }
+
+    th {
+      background: #111827;
+      color: #bfd0e6;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 13px 14px;
+    }
+
+    tbody tr:hover { background: rgba(30, 41, 59, 0.56); }
+    .amount { text-align: right; font-variant-numeric: tabular-nums; }
+    .empty-row td { color: var(--muted); padding: 30px 14px; text-align: center; }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 50;
+      max-width: min(420px, calc(100vw - 40px));
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.36);
+      color: #e2e8f0;
+      padding: 12px 14px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hidden { display: none !important; }
+
+    .login-screen {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .login-card {
+      width: min(440px, 100%);
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 28px 80px rgba(2, 6, 23, 0.42);
+      padding: 24px;
+    }
+
+    .month-bar {
+      display: grid;
+      grid-template-columns: minmax(180px, 240px) repeat(2, auto);
+      gap: 10px;
+      align-items: end;
+    }
+
+    @media (max-width: 780px) {
+      .shell { width: min(100% - 20px, 1320px); padding-top: 16px; }
+      .stat { border-left: 0; padding-left: 0; }
+      .btn { width: 100%; }
+      .month-bar { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <section id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <p class="mb-1 text-xs font-extrabold uppercase tracking-[0.18em] text-sky-300">Defyn Payroll</p>
+      <h1 class="m-0 text-2xl font-black text-white">Sign in to Payroll</h1>
+      <p id="firebaseStatus" class="mt-2 text-sm text-slate-400">Use your Firebase email and password to access company payroll records.</p>
+      <form id="loginForm" class="mt-5 grid gap-3">
+        <div>
+          <label class="label" for="loginEmail">Email</label>
+          <input id="loginEmail" class="field" type="email" autocomplete="email" placeholder="admin@company.com" required>
+        </div>
+        <div>
+          <label class="label" for="loginPassword">Password</label>
+          <input id="loginPassword" class="field" type="password" autocomplete="current-password" placeholder="Password" required>
+        </div>
+        <button id="loginBtn" class="btn btn-primary" type="submit">Sign In</button>
+        <button id="registerBtnAuth" class="btn btn-muted" type="button">Create Account</button>
+      </form>
+    </div>
+  </section>
+
+  <main id="appShell" class="shell hidden">
+    <header class="mb-5 flex flex-col gap-4 border-b border-slate-700 pb-5 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p class="mb-1 text-xs font-extrabold uppercase tracking-[0.18em] text-sky-300">Defyn Payroll</p>
+        <h1 class="m-0 text-3xl font-black tracking-normal text-white sm:text-4xl">Professional Salary Management</h1>
+        <p class="mt-2 max-w-2xl text-sm text-slate-400">Build payslips, statutory deductions, registers, and ZIP exports with secure Firebase storage.</p>
+      </div>
+      <div class="grid grid-cols-1 gap-2 sm:grid-cols-4 lg:flex">
+        <button id="downloadAllBtn" class="btn btn-green" type="button">Download All</button>
+        <button id="newEntryBtn" class="btn btn-muted" type="button">New Entry</button>
+        <button id="registerBtn" class="btn btn-indigo" type="button">Payroll Register</button>
+        <button id="logoutBtn" class="btn btn-muted" type="button">Sign Out</button>
+      </div>
+    </header>
+
+    <section class="panel mb-5 p-5">
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <h2 class="section-title mb-1"><span class="title-bar"></span>Payroll Month</h2>
+          <p id="signedInText" class="m-0 text-sm text-slate-400">Signed in</p>
+        </div>
+        <div class="month-bar">
+          <div>
+            <label class="label" for="payrollMonth">Active Month</label>
+            <input id="payrollMonth" class="field" type="month">
+          </div>
+          <button id="loadMonthBtn" class="btn btn-muted" type="button">Load Month</button>
+          <button id="carryForwardBtn" class="btn btn-primary" type="button">Carry Forward Previous</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5 grid gap-4 lg:grid-cols-[1fr_340px]">
+      <div class="panel p-5">
+        <h2 class="section-title"><span class="title-bar"></span>Organization Details</h2>
+        <div class="grid gap-3 md:grid-cols-2">
+          <div>
+            <label class="label" for="compName">Legal Name</label>
+            <input id="compName" class="field" type="text" placeholder="Company Legal Name">
+          </div>
+          <div>
+            <label class="label" for="compAddress">Registered Address</label>
+            <input id="compAddress" class="field" type="text" placeholder="Registered Address">
+          </div>
+          <div>
+            <label class="label" for="compPhone">Phone / GSTIN</label>
+            <input id="compPhone" class="field" type="text" placeholder="Phone / GSTIN">
+          </div>
+          <div>
+            <label class="label" for="compEmail">Email / Website</label>
+            <input id="compEmail" class="field" type="text" placeholder="Email / Website">
+          </div>
+        </div>
+      </div>
+
+      <aside class="panel p-5">
+        <h2 class="section-title"><span class="title-bar"></span>Brand Assets</h2>
+        <label class="label" for="logoUpload">Company Logo</label>
+        <input id="logoUpload" class="field cursor-pointer p-2" type="file" accept="image/*">
+        <div id="logoPreviewArea" class="mt-4 hidden rounded border border-slate-700 bg-slate-950 p-3">
+          <img id="logoPreviewImg" class="max-h-16 max-w-full object-contain" alt="Company logo preview">
+        </div>
+      </aside>
+    </section>
+
+    <section class="panel mb-5 p-5">
+      <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <h2 class="section-title mb-1"><span class="title-bar"></span>Employee Master</h2>
+          <p class="m-0 text-sm text-slate-400">Store permanent employee details once, then load active employees into any payroll month.</p>
+        </div>
+          <button id="loadMasterBtn" class="btn btn-indigo" type="button">Load Active Employees</button>
+      </div>
+
+      <form id="masterForm" class="mt-5">
+        <div class="mt-4 grid gap-3 lg:grid-cols-4">
+          <div>
+            <label class="label" for="masterEmpId">Employee ID</label>
+            <input id="masterEmpId" class="field" placeholder="EMP-001" required>
+          </div>
+          <div>
+            <label class="label" for="masterName">Full Name</label>
+            <input id="masterName" class="field" placeholder="Employee name" required>
+          </div>
+          <div>
+            <label class="label" for="masterCompany">Company</label>
+            <input id="masterCompany" class="field" placeholder="Company name">
+          </div>
+          <div>
+            <label class="label" for="masterRate">Daily Rate</label>
+            <input id="masterRate" class="field" type="number" min="0" step="0.01" placeholder="INR">
+          </div>
+        </div>
+
+        <div class="mt-4 grid gap-3 lg:grid-cols-4">
+          <div>
+            <label class="label" for="masterDays">Default Days</label>
+            <input id="masterDays" class="field" type="number" min="0" max="31" step="0.5" placeholder="26">
+          </div>
+          <div>
+            <label class="label" for="masterDesignation">Designation</label>
+            <input id="masterDesignation" class="field" placeholder="Operator">
+          </div>
+          <div>
+            <label class="label" for="masterDepartment">Department</label>
+            <input id="masterDepartment" class="field" placeholder="Production">
+          </div>
+          <div>
+            <label class="label" for="masterPan">PAN</label>
+            <input id="masterPan" class="field" placeholder="ABCDE1234F">
+          </div>
+          <div>
+            <label class="label" for="masterUan">UAN</label>
+            <input id="masterUan" class="field" placeholder="PF UAN">
+          </div>
+        </div>
+
+        <div class="mt-4 grid gap-3 lg:grid-cols-[1fr_auto]">
+          <div>
+            <label class="label" for="masterBank">Bank Account</label>
+            <input id="masterBank" class="field" placeholder="Account number">
+          </div>
+          <div class="flex flex-wrap items-end gap-4 pb-2">
+            <label class="toggle"><input id="masterPf" type="checkbox">PF</label>
+            <label class="toggle"><input id="masterEsi" type="checkbox" checked>ESI</label>
+            <label class="toggle"><input id="masterPt" type="checkbox" checked>PT</label>
+            <label class="toggle"><input id="masterActive" type="checkbox" checked>Active</label>
+          </div>
+        </div>
+
+        <div class="mt-5 grid gap-3 sm:grid-cols-[1fr_auto]">
+          <button id="masterSaveBtn" class="btn btn-primary" type="submit">Save Master Employee</button>
+          <button id="masterCancelBtn" class="btn btn-muted" type="button">Cancel</button>
+        </div>
+      </form>
+
+      <div class="table-wrap mt-5">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Company</th>
+              <th>Designation</th>
+              <th>Department</th>
+              <th class="amount">Rate</th>
+              <th>Status</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="masterTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel mb-5 p-5">
+      <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <h2 class="section-title mb-1"><span class="title-bar"></span>Monthly Payroll Entry</h2>
+          <p class="m-0 text-sm text-slate-400">Select an employee from master, then update only monthly days, canteen and exceptions.</p>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-3">
+          <div class="stat">
+            <span>Employees</span>
+            <strong id="statEmployees">0</strong>
+          </div>
+          <div class="stat">
+            <span>Gross</span>
+            <strong id="statGross">₹ 0.00</strong>
+          </div>
+          <div class="stat">
+            <span>Net</span>
+            <strong id="statNet">₹ 0.00</strong>
+          </div>
+        </div>
+      </div>
+
+      <form id="employeeForm" class="mt-5">
+        <div class="grid gap-3 lg:grid-cols-[1fr_auto]">
+          <div>
+            <label class="label" for="masterEmployeeSelect">Use Employee Master</label>
+            <select id="masterEmployeeSelect" class="field">
+              <option value="">Select master employee to fill payroll form</option>
+            </select>
+          </div>
+          <button id="fillFromMasterBtn" class="btn btn-muted" type="button">Fill Payroll Form</button>
+        </div>
+
+        <div class="grid gap-3 lg:grid-cols-4">
+          <div class="lg:col-span-2">
+            <label class="label" for="month">Pay Period</label>
+            <input id="month" class="field" placeholder="April 2026">
+          </div>
+          <div>
+            <label class="label" for="companySelect">Company</label>
+            <select id="companySelect" class="field">
+              <option value="custom">Custom</option>
+              <option value="pampashree">Pampashree Infotech</option>
+            </select>
+          </div>
+          <div>
+            <label class="label" for="companyName">Company Override</label>
+            <input id="companyName" class="field" placeholder="Company name">
+          </div>
+        </div>
+
+        <div class="mt-4 grid gap-3 lg:grid-cols-4">
+          <div>
+            <label class="label" for="empId">Employee ID</label>
+            <input id="empId" class="field" placeholder="EMP-001" required>
+          </div>
+          <div>
+            <label class="label" for="name">Full Name</label>
+            <input id="name" class="field" placeholder="Employee name" required>
+          </div>
+          <div>
+            <label class="label" for="designation">Designation</label>
+            <input id="designation" class="field" placeholder="Senior Developer">
+          </div>
+          <div>
+            <label class="label" for="department">Department</label>
+            <input id="department" class="field" placeholder="Engineering">
+          </div>
+        </div>
+
+        <div class="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-5">
+          <div>
+            <label class="label" for="rate">Daily Rate</label>
+            <input id="rate" class="field" type="number" min="0" step="0.01" placeholder="₹">
+          </div>
+          <div>
+            <label class="label" for="days">Days Worked</label>
+            <input id="days" class="field" type="number" min="0" max="31" step="0.5" placeholder="26">
+          </div>
+          <div>
+            <label class="label" for="pan">PAN</label>
+            <input id="pan" class="field" placeholder="ABCDE1234F">
+          </div>
+          <div>
+            <label class="label" for="uan">UAN</label>
+            <input id="uan" class="field" placeholder="PF UAN">
+          </div>
+          <div>
+            <label class="label" for="bankAccount">Bank Account</label>
+            <input id="bankAccount" class="field" placeholder="Account number">
+          </div>
+        </div>
+
+        <div class="mt-5 flex flex-wrap gap-5 border-t border-slate-700 pt-4">
+          <label class="toggle"><input id="pfToggle" type="checkbox">PF at 12% on basic</label>
+          <label class="toggle"><input id="esiToggle" type="checkbox" checked>ESI when gross is ₹21,000 or below</label>
+          <label class="toggle"><input id="ptToggle" type="checkbox" checked>Gujarat professional tax</label>
+          <label class="toggle"><input id="canteenToggle" type="checkbox">Canteen deduction</label>
+        </div>
+
+        <div id="canteenSection" class="mt-4 hidden rounded border border-slate-700 bg-slate-950/50 p-4">
+          <div class="grid gap-3 md:grid-cols-3">
+            <div>
+              <label class="label" for="tea">Tea Days</label>
+              <input id="tea" class="field text-center" type="number" min="0" value="0">
+            </div>
+            <div>
+              <label class="label" for="breakfast">Breakfast Days</label>
+              <input id="breakfast" class="field text-center" type="number" min="0" value="0">
+            </div>
+            <div>
+              <label class="label" for="lunch">Lunch Days</label>
+              <input id="lunch" class="field text-center" type="number" min="0" value="0">
+            </div>
+          </div>
+          <p class="mb-0 mt-3 text-xs font-semibold text-slate-400">Canteen is calculated at ₹25 per selected meal component.</p>
+        </div>
+
+        <div class="mt-5 grid gap-3 sm:grid-cols-[1fr_auto]">
+          <button id="saveBtn" class="btn btn-primary" type="submit">Save Employee Record</button>
+          <button id="cancelBtn" class="btn btn-muted" type="button">Cancel</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel overflow-hidden">
+      <div class="flex flex-col gap-2 border-b border-slate-700 p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 class="m-0 text-lg font-black text-white">Payroll Master</h2>
+          <p class="m-0 mt-1 text-sm text-slate-400">Edit records or export individual salary slips.</p>
+        </div>
+        <span id="recordCount" class="inline-flex rounded-full bg-slate-800 px-3 py-1 text-xs font-bold text-slate-300">0 records</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Company</th>
+              <th>Designation</th>
+              <th class="amount">Gross</th>
+              <th class="amount">PT</th>
+              <th class="amount">Deductions</th>
+              <th class="amount">Net</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div class="border-t border-slate-700 px-5 py-3 text-right text-xs font-semibold text-slate-400">Exports are generated locally in your browser.</div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // 1) Paste your Firebase web app config here.
+    // Firebase Console -> Project settings -> Your apps -> Web app -> SDK setup and configuration -> Config.
+    const firebaseConfig = {
+      apiKey: "AIzaSyB2IDOTiYYxX0OP3zKZEUPgxUKxPwB_2eM",
+      authDomain: "payroll-c53a5.firebaseapp.com",
+      projectId: "payroll-c53a5",
+      storageBucket: "payroll-c53a5.firebasestorage.app",
+      messagingSenderId: "1079591821806",
+      appId: "1:1079591821806:web:8021f2a06e36533a9a6eff",
+      measurementId: "G-DMVWEV03Z6"
+    };
+
+    const STORAGE = {
+      employees: "defyn_pro_employees",
+      settings: "companySettings",
+      logo: "companyLogo"
+    };
+
+    let employees = [];
+    let employeeMasters = [];
+    let masterEditId = "";
+    let editIndex = -1;
+    let logoBase64 = "";
+    let currentUser = null;
+    let db = null;
+    let auth = null;
+    let firebaseReady = false;
+    let currentMonthKey = getCurrentMonthKey();
+    let companySettings = {
+      name: "Defyn Technologies",
+      address: "Bangalore, India",
+      phone: "+91 98765 43210",
+      email: "hr@defyn.com"
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    const refs = {
+      compName: $("compName"),
+      compAddress: $("compAddress"),
+      compPhone: $("compPhone"),
+      compEmail: $("compEmail"),
+      loginScreen: $("loginScreen"),
+      appShell: $("appShell"),
+      loginForm: $("loginForm"),
+      loginEmail: $("loginEmail"),
+      loginPassword: $("loginPassword"),
+      registerBtnAuth: $("registerBtnAuth"),
+      firebaseStatus: $("firebaseStatus"),
+      signedInText: $("signedInText"),
+      payrollMonth: $("payrollMonth"),
+      loadMonthBtn: $("loadMonthBtn"),
+      carryForwardBtn: $("carryForwardBtn"),
+      logoutBtn: $("logoutBtn"),
+      masterForm: $("masterForm"),
+      masterEmpId: $("masterEmpId"),
+      masterName: $("masterName"),
+      masterCompany: $("masterCompany"),
+      masterRate: $("masterRate"),
+      masterDays: $("masterDays"),
+      masterDesignation: $("masterDesignation"),
+      masterDepartment: $("masterDepartment"),
+      masterPan: $("masterPan"),
+      masterUan: $("masterUan"),
+      masterBank: $("masterBank"),
+      masterPf: $("masterPf"),
+      masterEsi: $("masterEsi"),
+      masterPt: $("masterPt"),
+      masterActive: $("masterActive"),
+      masterSaveBtn: $("masterSaveBtn"),
+      masterCancelBtn: $("masterCancelBtn"),
+      loadMasterBtn: $("loadMasterBtn"),
+      masterTableBody: $("masterTableBody"),
+      masterEmployeeSelect: $("masterEmployeeSelect"),
+      fillFromMasterBtn: $("fillFromMasterBtn"),
+      month: $("month"),
+      companySelect: $("companySelect"),
+      companyName: $("companyName"),
+      empId: $("empId"),
+      name: $("name"),
+      designation: $("designation"),
+      department: $("department"),
+      rate: $("rate"),
+      days: $("days"),
+      pan: $("pan"),
+      uan: $("uan"),
+      bankAccount: $("bankAccount"),
+      pfToggle: $("pfToggle"),
+      esiToggle: $("esiToggle"),
+      ptToggle: $("ptToggle"),
+      canteenToggle: $("canteenToggle"),
+      canteenSection: $("canteenSection"),
+      tea: $("tea"),
+      breakfast: $("breakfast"),
+      lunch: $("lunch"),
+      logoUpload: $("logoUpload"),
+      logoPreviewArea: $("logoPreviewArea"),
+      logoPreviewImg: $("logoPreviewImg"),
+      tableBody: $("tableBody"),
+      recordCount: $("recordCount"),
+      statEmployees: $("statEmployees"),
+      statGross: $("statGross"),
+      statNet: $("statNet"),
+      employeeForm: $("employeeForm"),
+      saveBtn: $("saveBtn"),
+      toast: $("toast")
+    };
+
+    function readJSON(key, fallback) {
+      try {
+        const value = JSON.parse(localStorage.getItem(key));
+        return value ?? fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function isFirebaseConfigured() {
+      return firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("PASTE_") && firebaseConfig.projectId && !firebaseConfig.projectId.startsWith("PASTE_");
+    }
+
+    function getCurrentMonthKey(date = new Date()) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      return `${year}-${month}`;
+    }
+
+    function monthKeyToLabel(monthKey) {
+      const [year, month] = String(monthKey || getCurrentMonthKey()).split("-").map(Number);
+      return new Date(year, month - 1, 1).toLocaleString("en-IN", { month: "long", year: "numeric" });
+    }
+
+    function getPreviousMonthKey(monthKey) {
+      const [year, month] = String(monthKey || getCurrentMonthKey()).split("-").map(Number);
+      return getCurrentMonthKey(new Date(year, month - 2, 1));
+    }
+
+    function monthDocRef(monthKey = currentMonthKey) {
+      return db.collection("users").doc(currentUser.uid).collection("payrollMonths").doc(monthKey);
+    }
+
+    function masterCollectionRef() {
+      return db.collection("users").doc(currentUser.uid).collection("employees");
+    }
+
+    function setBusy(isBusy) {
+      document.querySelectorAll("button, input, select").forEach((el) => {
+        if (el.id === "loginEmail" || el.id === "loginPassword") return;
+        el.disabled = isBusy;
+      });
+    }
+
+    async function persistEmployees() {
+      await saveCurrentMonth();
+    }
+
+    async function saveCurrentMonth() {
+      if (!firebaseReady || !currentUser) return;
+      await monthDocRef().set({
+        monthKey: currentMonthKey,
+        monthLabel: monthKeyToLabel(currentMonthKey),
+        employees,
+        companySettings,
+        logoBase64,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    }
+
+    function saveCompanySettings() {
+      companySettings = {
+        name: refs.compName.value.trim() || "Defyn Technologies",
+        address: refs.compAddress.value.trim() || "Registered Office",
+        phone: refs.compPhone.value.trim(),
+        email: refs.compEmail.value.trim()
+      };
+      saveCurrentMonth().catch((error) => showToast(error.message));
+    }
+
+    function loadCompanySettings() {
+      refs.compName.value = companySettings.name || "";
+      refs.compAddress.value = companySettings.address || "";
+      refs.compPhone.value = companySettings.phone || "";
+      refs.compEmail.value = companySettings.email || "";
+    }
+
+    async function loadPayrollMonth(monthKey = currentMonthKey) {
+      if (!firebaseReady || !currentUser) return;
+      setBusy(true);
+      try {
+        currentMonthKey = monthKey || getCurrentMonthKey();
+        refs.payrollMonth.value = currentMonthKey;
+        refs.month.value = monthKeyToLabel(currentMonthKey);
+        const snapshot = await monthDocRef(currentMonthKey).get();
+        if (snapshot.exists) {
+          const data = snapshot.data();
+          employees = Array.isArray(data.employees) ? data.employees : [];
+          companySettings = data.companySettings || companySettings;
+          logoBase64 = data.logoBase64 || "";
+        } else {
+          employees = [];
+          logoBase64 = "";
+          companySettings = companySettings || {};
+          await saveCurrentMonth();
+        }
+        loadCompanySettings();
+        renderLogo();
+        renderEmployeeTable();
+        resetForm(false);
+        showToast(`Loaded ${monthKeyToLabel(currentMonthKey)}.`);
+      } catch (error) {
+        showToast(error.message);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function carryForwardPreviousMonth() {
+      if (!firebaseReady || !currentUser) return;
+      const previousMonthKey = getPreviousMonthKey(currentMonthKey);
+      setBusy(true);
+      try {
+        const currentSnapshot = await monthDocRef(currentMonthKey).get();
+        if (currentSnapshot.exists && Array.isArray(currentSnapshot.data().employees) && currentSnapshot.data().employees.length) {
+          if (!window.confirm(`${monthKeyToLabel(currentMonthKey)} already has employees. Replace them with ${monthKeyToLabel(previousMonthKey)} employees?`)) return;
+        }
+
+        const previousSnapshot = await monthDocRef(previousMonthKey).get();
+        if (!previousSnapshot.exists || !Array.isArray(previousSnapshot.data().employees) || !previousSnapshot.data().employees.length) {
+          showToast(`No employee data found for ${monthKeyToLabel(previousMonthKey)}.`);
+          return;
+        }
+
+        const previousData = previousSnapshot.data();
+        const monthLabel = monthKeyToLabel(currentMonthKey);
+        employees = previousData.employees.map((employee) => {
+          const copied = {
+            ...employee,
+            month: monthLabel,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          };
+          return salarySnapshot(copied);
+        });
+        companySettings = previousData.companySettings || companySettings;
+        logoBase64 = previousData.logoBase64 || logoBase64;
+        await saveCurrentMonth();
+        loadCompanySettings();
+        renderLogo();
+        renderEmployeeTable();
+        resetForm(false);
+        showToast(`Carried forward ${employees.length} employees from ${monthKeyToLabel(previousMonthKey)}.`);
+      } catch (error) {
+        showToast(error.message);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    function renderLogo() {
+      if (logoBase64) {
+        refs.logoPreviewImg.src = logoBase64;
+        refs.logoPreviewArea.classList.remove("hidden");
+      } else {
+        refs.logoPreviewImg.removeAttribute("src");
+        refs.logoPreviewArea.classList.add("hidden");
+      }
+    }
+
+    function sanitizeDocId(value) {
+      return String(value || "").trim().replace(/[\/#[\].]/g, "-");
+    }
+
+    async function loadEmployeeMasters() {
+      if (!firebaseReady || !currentUser) return;
+      const snapshot = await masterCollectionRef().orderBy("empId").get();
+      employeeMasters = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      renderMasterTable();
+      renderMasterSelect();
+    }
+
+    function getMasterFormEmployee() {
+      const empId = refs.masterEmpId.value.trim();
+      const name = refs.masterName.value.trim();
+      const rate = Number.parseFloat(refs.masterRate.value) || 0;
+      const defaultDays = Number.parseFloat(refs.masterDays.value) || 0;
+      if (!empId || !name) return fail("Master employee ID and name are required.");
+      return {
+        empId,
+        name,
+        company: refs.masterCompany.value.trim() || refs.companyName.value.trim() || companySettings.name || "",
+        rate,
+        defaultDays,
+        designation: refs.masterDesignation.value.trim(),
+        department: refs.masterDepartment.value.trim(),
+        pan: refs.masterPan.value.trim().toUpperCase(),
+        uan: refs.masterUan.value.trim(),
+        bankAccount: refs.masterBank.value.trim(),
+        pfEnabled: refs.masterPf.checked,
+        esiEnabled: refs.masterEsi.checked,
+        ptEnabled: refs.masterPt.checked,
+        active: refs.masterActive.checked,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+    }
+
+    async function saveMasterEmployee() {
+      const master = getMasterFormEmployee();
+      if (!master) return;
+      const docId = sanitizeDocId(masterEditId || master.empId);
+      await masterCollectionRef().doc(docId).set(master, { merge: true });
+      showToast("Master employee saved.");
+      resetMasterForm();
+      await loadEmployeeMasters();
+    }
+
+    function resetMasterForm() {
+      masterEditId = "";
+      refs.masterForm.reset();
+      refs.masterEsi.checked = true;
+      refs.masterPt.checked = true;
+      refs.masterActive.checked = true;
+      refs.masterSaveBtn.textContent = "Save Master Employee";
+      refs.masterEmpId.disabled = false;
+    }
+
+    function editMasterEmployee(index) {
+      const master = employeeMasters[index];
+      if (!master) return;
+      masterEditId = master.id;
+      refs.masterEmpId.value = master.empId || "";
+      refs.masterEmpId.disabled = true;
+      refs.masterName.value = master.name || "";
+      refs.masterCompany.value = master.company || "";
+      refs.masterRate.value = master.rate || "";
+      refs.masterDays.value = master.defaultDays || "";
+      refs.masterDesignation.value = master.designation || "";
+      refs.masterDepartment.value = master.department || "";
+      refs.masterPan.value = master.pan || "";
+      refs.masterUan.value = master.uan || "";
+      refs.masterBank.value = master.bankAccount || "";
+      refs.masterPf.checked = Boolean(master.pfEnabled);
+      refs.masterEsi.checked = master.esiEnabled !== false;
+      refs.masterPt.checked = master.ptEnabled !== false;
+      refs.masterActive.checked = master.active !== false;
+      refs.masterSaveBtn.textContent = "Update Master Employee";
+    }
+
+    async function deleteMasterEmployee(index) {
+      const master = employeeMasters[index];
+      if (!master || !window.confirm(`Delete master record for ${master.name}?`)) return;
+      await masterCollectionRef().doc(master.id).delete();
+      showToast("Master employee deleted.");
+      if (masterEditId === master.id) resetMasterForm();
+      await loadEmployeeMasters();
+    }
+
+    function renderMasterTable() {
+      if (!employeeMasters.length) {
+        refs.masterTableBody.innerHTML = `<tr class="empty-row"><td colspan="8">No master employees yet. Add permanent employee details here.</td></tr>`;
+        renderMasterSelect();
+        return;
+      }
+
+      refs.masterTableBody.innerHTML = employeeMasters.map((employee, index) => `
+        <tr>
+          <td class="font-mono text-slate-200">${escapeHtml(employee.empId)}</td>
+          <td class="font-semibold text-white">${escapeHtml(employee.name)}</td>
+          <td>${escapeHtml(employee.company || "-")}</td>
+          <td>${escapeHtml(employee.designation || "-")}</td>
+          <td>${escapeHtml(employee.department || "-")}</td>
+          <td class="amount">${formatINR(employee.rate || 0)}<span class="block text-xs text-slate-400">${Number(employee.defaultDays) || 0} days</span></td>
+          <td>${employee.active === false ? "Inactive" : "Active"}</td>
+          <td>
+            <div class="flex justify-center gap-2">
+              <button class="btn-icon text-amber-300" type="button" title="Edit master" onclick="editMasterEmployee(${index})">Edit</button>
+              <button class="btn-icon text-red-300" type="button" title="Delete master" onclick="deleteMasterEmployee(${index})">Del</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+      renderMasterSelect();
+    }
+
+    function renderMasterSelect() {
+      if (!refs.masterEmployeeSelect) return;
+      const options = employeeMasters
+        .filter((employee) => employee.active !== false)
+        .map((employee, index) => `<option value="${index}">${escapeHtml(employee.empId)} - ${escapeHtml(employee.name)}</option>`)
+        .join("");
+      refs.masterEmployeeSelect.innerHTML = `<option value="">Select master employee to fill payroll form</option>${options}`;
+    }
+
+    function masterToPayrollEmployee(master) {
+      return salarySnapshot({
+        company: master.company || companySettings.name || "",
+        month: monthKeyToLabel(currentMonthKey),
+        empId: master.empId,
+        name: master.name,
+        designation: master.designation || "",
+        department: master.department || "",
+        pan: master.pan || "",
+        uan: master.uan || "",
+        bankAccount: master.bankAccount || "",
+        rate: Number(master.rate) || 0,
+        days: Number(master.defaultDays) || 0,
+        pfEnabled: Boolean(master.pfEnabled),
+        esiEnabled: master.esiEnabled !== false,
+        ptEnabled: master.ptEnabled !== false,
+        canteenEnabled: false,
+        teaDays: 0,
+        breakfastDays: 0,
+        lunchDays: 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+    }
+
+    function fillPayrollFormFromSelectedMaster() {
+      const selectedIndex = Number.parseInt(refs.masterEmployeeSelect.value, 10);
+      const activeMasters = employeeMasters.filter((employee) => employee.active !== false);
+      const master = activeMasters[selectedIndex];
+      if (!master) return showToast("Select a master employee first.");
+      const existingIndex = employees.findIndex((employee) => String(employee.empId || "").toLowerCase() === String(master.empId || "").toLowerCase());
+      const payrollEmployee = existingIndex >= 0 ? salarySnapshot(employees[existingIndex]) : masterToPayrollEmployee(master);
+      fillSalaryFormFromEmployee(payrollEmployee, existingIndex);
+      showToast(existingIndex >= 0 ? "Existing payroll record opened." : "Master details filled into payroll form.");
+    }
+
+    function fillSalaryFormFromEmployee(e, index = -1) {
+      editIndex = index;
+      refs.month.value = e.month || monthKeyToLabel(currentMonthKey);
+      refs.companySelect.value = e.company === "Pampashree Infotech" ? "pampashree" : "custom";
+      handleCompanyChange();
+      refs.companyName.value = e.company || "";
+      refs.empId.value = e.empId || "";
+      refs.name.value = e.name || "";
+      refs.designation.value = e.designation || "";
+      refs.department.value = e.department || "";
+      refs.rate.value = e.rate || "";
+      refs.days.value = e.days || "";
+      refs.pan.value = e.pan || "";
+      refs.uan.value = e.uan || "";
+      refs.bankAccount.value = e.bankAccount || "";
+      refs.pfToggle.checked = Boolean(e.pfEnabled);
+      refs.esiToggle.checked = e.esiEnabled !== false;
+      refs.ptToggle.checked = e.ptEnabled !== false;
+      refs.canteenToggle.checked = Boolean(e.canteenEnabled);
+      refs.tea.value = e.teaDays || 0;
+      refs.breakfast.value = e.breakfastDays || 0;
+      refs.lunch.value = e.lunchDays || 0;
+      toggleCanteenUI();
+      refs.saveBtn.textContent = index >= 0 ? "Update Employee Record" : "Save Employee Record";
+      window.scrollTo({ top: refs.employeeForm.offsetTop - 90, behavior: "smooth" });
+      window.setTimeout(() => refs.days.focus(), 250);
+    }
+
+    async function loadActiveMastersIntoPayroll() {
+      if (!employeeMasters.length) await loadEmployeeMasters();
+      const activeMasters = employeeMasters.filter((employee) => employee.active !== false);
+      if (!activeMasters.length) return showToast("No active master employees found.");
+      if (employees.length && !window.confirm(`${monthKeyToLabel(currentMonthKey)} already has payroll records. Add missing master employees only?`)) return;
+
+      const existingIds = new Set(employees.map((employee) => String(employee.empId || "").toLowerCase()));
+      const additions = activeMasters
+        .filter((master) => !existingIds.has(String(master.empId || "").toLowerCase()))
+        .map(masterToPayrollEmployee);
+
+      employees = [...employees, ...additions];
+      await saveCurrentMonth();
+      renderEmployeeTable();
+      resetForm(false);
+      showToast(`${additions.length} active master employees loaded and salaries calculated for ${monthKeyToLabel(currentMonthKey)}. Use Edit for changes.`);
+    }
+
+    function showToast(message) {
+      refs.toast.textContent = message;
+      refs.toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => refs.toast.classList.remove("show"), 2600);
+    }
+
+    function formatINR(amount) {
+      const value = Number.isFinite(Number(amount)) ? Number(amount) : 0;
+      return "₹ " + value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function money(amount) {
+      const value = Number.isFinite(Number(amount)) ? Number(amount) : 0;
+      return value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function pdfMoney(amount) {
+      return "INR " + money(amount);
+    }
+
+    function sanitizeFilename(value) {
+      return String(value || "document").replace(/[\\/:*?"<>|]+/g, "-").replace(/\s+/g, "_");
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[char]));
+    }
+
+    function computeSalaryDetails(raw) {
+      const gross = round2(raw.rate * raw.days);
+      const basic = round2(gross * 0.5);
+      const hra = round2(gross * 0.2);
+      const allowance = round2(gross * 0.3);
+      const pfEmployee = raw.pfEnabled ? round2(basic * 0.12) : 0;
+      const esiEmployee = raw.esiEnabled && gross <= 21000 ? round2(gross * 0.0075) : 0;
+      const professionalTax = raw.ptEnabled && gross > 12000 ? 200 : 0;
+      const canteenMeals = raw.canteenEnabled ? raw.teaDays + raw.breakfastDays + raw.lunchDays : 0;
+      const canteenDeduction = round2(canteenMeals * 25);
+      const totalDeductions = round2(pfEmployee + esiEmployee + professionalTax + canteenDeduction);
+      const netSalary = round2(gross - totalDeductions);
+      const pfEmployer = raw.pfEnabled ? round2(basic * 0.12) : 0;
+      const esiEmployer = raw.esiEnabled && gross <= 21000 ? round2(gross * 0.0325) : 0;
+      return { basic, hra, allowance, gross, pfEmployee, esiEmployee, professionalTax, canteenDeduction, totalDeductions, netSalary, pfEmployer, esiEmployer };
+    }
+
+    function salarySnapshot(emp) {
+      const raw = {
+        ...emp,
+        rate: Number(emp.rate) || 0,
+        days: Number(emp.days) || 0,
+        teaDays: Number(emp.teaDays) || 0,
+        breakfastDays: Number(emp.breakfastDays) || 0,
+        lunchDays: Number(emp.lunchDays) || 0,
+        pfEnabled: Boolean(emp.pfEnabled),
+        esiEnabled: Boolean(emp.esiEnabled),
+        ptEnabled: emp.ptEnabled !== false,
+        canteenEnabled: Boolean(emp.canteenEnabled)
+      };
+      return { ...emp, ...computeSalaryDetails(raw) };
+    }
+
+    function round2(value) {
+      return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+    }
+
+    function getFormEmployee() {
+      saveCompanySettings();
+      const company = refs.companyName.value.trim() || (refs.companySelect.value === "pampashree" ? "Pampashree Infotech" : "");
+      const month = refs.month.value.trim() || new Date().toLocaleString("en-IN", { month: "long", year: "numeric" });
+      const empId = refs.empId.value.trim();
+      const name = refs.name.value.trim();
+      const rate = Number.parseFloat(refs.rate.value);
+      const days = Number.parseFloat(refs.days.value);
+
+      if (!company) return fail("Please provide a company name.");
+      if (!empId || !name) return fail("Employee ID and name are required.");
+      if (!Number.isFinite(rate) || rate <= 0 || !Number.isFinite(days) || days <= 0) return fail("Daily rate and days worked must be positive.");
+
+      const raw = {
+        company,
+        month,
+        empId,
+        name,
+        designation: refs.designation.value.trim(),
+        department: refs.department.value.trim(),
+        pan: refs.pan.value.trim().toUpperCase(),
+        uan: refs.uan.value.trim(),
+        bankAccount: refs.bankAccount.value.trim(),
+        rate,
+        days,
+        pfEnabled: refs.pfToggle.checked,
+        esiEnabled: refs.esiToggle.checked,
+        ptEnabled: refs.ptToggle.checked,
+        canteenEnabled: refs.canteenToggle.checked,
+        teaDays: Math.max(0, Number.parseInt(refs.tea.value, 10) || 0),
+        breakfastDays: Math.max(0, Number.parseInt(refs.breakfast.value, 10) || 0),
+        lunchDays: Math.max(0, Number.parseInt(refs.lunch.value, 10) || 0),
+        createdAt: editIndex >= 0 ? employees[editIndex].createdAt : new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      return { ...raw, ...computeSalaryDetails(raw) };
+    }
+
+    function fail(message) {
+      showToast(message);
+      return null;
+    }
+
+    async function addOrUpdateEmployee() {
+      const empData = getFormEmployee();
+      if (!empData) return;
+
+      if (editIndex === -1) {
+        employees.push(empData);
+        showToast("Employee record added.");
+      } else {
+        employees[editIndex] = empData;
+        showToast("Employee record updated.");
+      }
+
+      await persistEmployees();
+      renderEmployeeTable();
+      resetForm();
+    }
+
+    function resetForm(shouldFocus = true) {
+      editIndex = -1;
+      refs.employeeForm.reset();
+      refs.month.value = monthKeyToLabel(currentMonthKey);
+      refs.esiToggle.checked = true;
+      refs.ptToggle.checked = true;
+      refs.tea.value = "0";
+      refs.breakfast.value = "0";
+      refs.lunch.value = "0";
+      refs.saveBtn.textContent = "Save Employee Record";
+      refs.canteenSection.classList.add("hidden");
+      handleCompanyChange();
+      if (shouldFocus) refs.month.focus();
+    }
+
+    function editEmployee(idx) {
+      const e = employees[idx];
+      fillSalaryFormFromEmployee(e, idx);
+    }
+
+    async function deleteEmployee(idx) {
+      const employee = employees[idx];
+      if (!window.confirm(`Delete ${employee.name}?`)) return;
+      employees.splice(idx, 1);
+      await persistEmployees();
+      renderEmployeeTable();
+      if (editIndex === idx) resetForm();
+      showToast("Employee record deleted.");
+    }
+
+    function renderEmployeeTable() {
+      const visibleEmployees = employees.map(salarySnapshot);
+      const totalGross = visibleEmployees.reduce((sum, emp) => sum + (Number(emp.gross) || 0), 0);
+      const totalNet = visibleEmployees.reduce((sum, emp) => sum + (Number(emp.netSalary) || 0), 0);
+
+      refs.statEmployees.textContent = String(employees.length);
+      refs.statGross.textContent = formatINR(totalGross);
+      refs.statNet.textContent = formatINR(totalNet);
+      refs.recordCount.textContent = `${employees.length} ${employees.length === 1 ? "record" : "records"}`;
+
+      if (!employees.length) {
+        refs.tableBody.innerHTML = `<tr class="empty-row"><td colspan="9">No employees yet. Add salary data to begin.</td></tr>`;
+        return;
+      }
+
+      refs.tableBody.innerHTML = visibleEmployees.map((emp, i) => `
+        <tr>
+          <td class="font-mono text-slate-200">${escapeHtml(emp.empId)}</td>
+          <td>
+            <strong class="block text-white">${escapeHtml(emp.name)}</strong>
+            <span class="text-xs text-slate-400">${escapeHtml(emp.month)}</span>
+          </td>
+          <td>${escapeHtml(emp.company)}</td>
+          <td>${escapeHtml(emp.designation || "-")}</td>
+          <td class="amount text-emerald-300">${formatINR(emp.gross)}</td>
+          <td class="amount text-slate-300">${formatINR(emp.professionalTax)}</td>
+          <td class="amount text-amber-300">${formatINR(emp.totalDeductions)}</td>
+          <td class="amount font-bold text-sky-300">${formatINR(emp.netSalary)}</td>
+          <td>
+            <div class="flex justify-center gap-2">
+              <button class="btn-icon text-sky-300" type="button" title="Download payslip" onclick="generatePayslip(${i})">PDF</button>
+              <button class="btn-icon text-amber-300" type="button" title="Edit employee" onclick="editEmployee(${i})">Edit</button>
+              <button class="btn-icon text-red-300" type="button" title="Delete employee" onclick="deleteEmployee(${i})">Del</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function numberToWordsINR(num) {
+      const value = Math.max(0, Number(num) || 0);
+      if (value === 0) return "Zero Rupees only";
+      const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+      const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+      const convert = (n) => {
+        if (n < 20) return ones[n];
+        if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
+        if (n < 1000) return ones[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + convert(n % 100) : "");
+        if (n < 100000) return convert(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + convert(n % 1000) : "");
+        if (n < 10000000) return convert(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + convert(n % 100000) : "");
+        return convert(Math.floor(n / 10000000)) + " Crore" + (n % 10000000 ? " " + convert(n % 10000000) : "");
+      };
+      const rupees = Math.floor(value);
+      const paise = Math.round((value - rupees) * 100);
+      return convert(rupees) + " Rupees" + (paise ? " and " + convert(paise) + " Paise" : "") + " only";
+    }
+
+    function addLogo(doc, x, y, width, height) {
+      if (!logoBase64) return;
+      try {
+        const type = logoBase64.includes("image/jpeg") ? "JPEG" : "PNG";
+        doc.addImage(logoBase64, type, x, y, width, height);
+      } catch {
+        // Ignore malformed or unsupported image data.
+      }
+    }
+
+    function buildPayslipDoc(employee) {
+      const emp = salarySnapshot(employee);
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: "mm", format: "a4" });
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 14;
+      const contentWidth = pageWidth - margin * 2;
+      const navy = [15, 23, 42];
+      const slate = [71, 85, 105];
+      const line = [203, 213, 225];
+      const soft = [248, 250, 252];
+      const green = [22, 101, 52];
+
+      const sectionLabel = (label, x, y, width) => {
+        doc.setFillColor(...navy);
+        doc.rect(x, y, width, 8, "F");
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9.5);
+        doc.text(label.toUpperCase(), x + 3, y + 5.5);
+      };
+
+      doc.setDrawColor(...line);
+      doc.setLineWidth(0.35);
+      doc.rect(margin, 10, contentWidth, pageHeight - 20);
+
+      doc.setFillColor(...navy);
+      doc.rect(margin, 10, contentWidth, 32, "F");
+      addLogo(doc, margin + 4, 16, 20, 14);
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(16);
+      doc.text(companySettings.name || emp.company || "Company", logoBase64 ? margin + 29 : margin + 5, 22);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.text(companySettings.address || "", logoBase64 ? margin + 29 : margin + 5, 28, { maxWidth: 95 });
+      doc.text([companySettings.phone, companySettings.email].filter(Boolean).join(" | "), logoBase64 ? margin + 29 : margin + 5, 34, { maxWidth: 95 });
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(20);
+      doc.text("SALARY SLIP", pageWidth - margin - 5, 24, { align: "right" });
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.text(emp.month || "-", pageWidth - margin - 5, 32, { align: "right" });
+
+      doc.setDrawColor(...line);
+      doc.setFillColor(...soft);
+      doc.rect(margin, 46, contentWidth, 14, "FD");
+      doc.setTextColor(...slate);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8);
+      doc.text("PAY PERIOD", margin + 4, 52);
+      doc.text("EMPLOYEE ID", margin + 66, 52);
+      doc.text("DEPARTMENT", margin + 124, 52);
+      doc.setTextColor(20, 28, 42);
+      doc.setFontSize(9);
+      doc.text(emp.month || "-", margin + 4, 57);
+      doc.text(emp.empId || "-", margin + 66, 57);
+      doc.text(emp.department || "-", margin + 124, 57, { maxWidth: 55 });
+
+      sectionLabel("Employee Details", margin, 67, contentWidth);
+      doc.autoTable({
+        startY: 75,
+        body: [
+          ["Employee Name", emp.name || "-", "Company", emp.company || "-"],
+          ["Designation", emp.designation || "-", "PAN", emp.pan || "-"],
+          ["UAN", emp.uan || "-", "Bank Account", emp.bankAccount || "-"]
+        ],
+        theme: "grid",
+        styles: { fontSize: 9, cellPadding: 3.2, lineColor: line, lineWidth: 0.15, textColor: [20, 28, 42] },
+        columnStyles: {
+          0: { fontStyle: "bold", fillColor: soft, cellWidth: 34 },
+          1: { cellWidth: 61 },
+          2: { fontStyle: "bold", fillColor: soft, cellWidth: 32 },
+          3: { cellWidth: contentWidth - 127 }
+        },
+        margin: { left: margin, right: margin },
+        tableWidth: contentWidth
+      });
+
+      const tablesY = doc.lastAutoTable.finalY + 10;
+      const gap = 8;
+      const boxWidth = (contentWidth - gap) / 2;
+
+      sectionLabel("Earnings", margin, tablesY, boxWidth);
+      doc.autoTable({
+        startY: tablesY + 8,
+        body: [
+          ["Basic", pdfMoney(emp.basic)],
+          ["HRA", pdfMoney(emp.hra)],
+          ["Allowance", pdfMoney(emp.allowance)],
+          ["Gross Earnings", pdfMoney(emp.gross)]
+        ],
+        theme: "grid",
+        styles: { fontSize: 9.2, cellPadding: 3.4, lineColor: line, lineWidth: 0.15, textColor: [20, 28, 42] },
+        columnStyles: { 0: { cellWidth: 43 }, 1: { halign: "right", cellWidth: boxWidth - 43 } },
+        bodyStyles: { minCellHeight: 8.5 },
+        didParseCell: (data) => {
+          if (data.row.index === 3) {
+            data.cell.styles.fontStyle = "bold";
+            data.cell.styles.fillColor = [240, 253, 244];
+          }
+        },
+        margin: { left: margin, right: margin },
+        tableWidth: boxWidth
+      });
+      const earningsY = doc.lastAutoTable.finalY;
+
+      const deductionsX = margin + boxWidth + gap;
+      sectionLabel("Deductions", deductionsX, tablesY, boxWidth);
+      doc.autoTable({
+        startY: tablesY + 8,
+        body: [
+          ["PF Employee", pdfMoney(emp.pfEmployee)],
+          ["ESI Employee", pdfMoney(emp.esiEmployee)],
+          ["Professional Tax", pdfMoney(emp.professionalTax)],
+          ["Canteen", pdfMoney(emp.canteenDeduction)],
+          ["Total Deductions", pdfMoney(emp.totalDeductions)]
+        ],
+        theme: "grid",
+        styles: { fontSize: 9.2, cellPadding: 3.4, lineColor: line, lineWidth: 0.15, textColor: [20, 28, 42] },
+        columnStyles: { 0: { cellWidth: 45 }, 1: { halign: "right", cellWidth: boxWidth - 45 } },
+        bodyStyles: { minCellHeight: 8.5 },
+        didParseCell: (data) => {
+          if (data.row.index === 4) {
+            data.cell.styles.fontStyle = "bold";
+            data.cell.styles.fillColor = [254, 242, 242];
+          }
+        },
+        margin: { left: deductionsX, right: margin },
+        tableWidth: boxWidth
+      });
+
+      const afterTablesY = Math.max(earningsY, doc.lastAutoTable.finalY) + 10;
+      doc.setDrawColor(...line);
+      doc.setFillColor(240, 253, 244);
+      doc.rect(margin, afterTablesY, contentWidth, 22, "FD");
+      doc.setTextColor(...green);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      doc.text("NET SALARY PAYABLE", margin + 5, afterTablesY + 8);
+      doc.setFontSize(20);
+      doc.text(pdfMoney(emp.netSalary), margin + 5, afterTablesY + 17);
+
+      doc.setTextColor(...slate);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.text("Gross minus PF, ESI, Gujarat Professional Tax and canteen deductions, as applicable.", margin + 106, afterTablesY + 8, { maxWidth: 78 });
+      doc.text("Gujarat PT: Nil up to INR 12,000 monthly gross; INR 200 above INR 12,000.", margin + 106, afterTablesY + 16, { maxWidth: 78 });
+
+      const wordsY = afterTablesY + 31;
+      sectionLabel("Amount In Words", margin, wordsY, contentWidth);
+      doc.setDrawColor(...line);
+      doc.rect(margin, wordsY + 8, contentWidth, 17);
+      doc.setTextColor(20, 28, 42);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.8);
+      doc.text(numberToWordsINR(emp.netSalary), margin + 4, wordsY + 18, { maxWidth: contentWidth - 8 });
+
+      const noteY = wordsY + 33;
+      doc.setFillColor(...soft);
+      doc.rect(margin, noteY, contentWidth, 14, "FD");
+      doc.setTextColor(...slate);
+      doc.setFontSize(7.8);
+      doc.text("This payslip is generated from payroll records maintained by the organization. Please contact HR for corrections or clarifications.", margin + 4, noteY + 8, { maxWidth: contentWidth - 8 });
+
+      const signY = pageHeight - 44;
+      const signX = margin + 4;
+      const signW = 74;
+      doc.setTextColor(...slate);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8);
+      doc.text("For " + (companySettings.name || emp.company || "Company"), signX, signY, { maxWidth: signW });
+
+      doc.setTextColor(20, 28, 42);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.5);
+      doc.text("HR / Authorized Signatory", signX, signY + 10);
+
+      doc.setDrawColor(...line);
+      doc.line(margin, pageHeight - 18, pageWidth - margin, pageHeight - 18);
+      doc.setTextColor(100, 116, 139);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.2);
+      doc.text("System generated salary slip", margin, pageHeight - 12);
+      doc.text(`Generated on ${new Date().toLocaleDateString("en-IN")}`, pageWidth - margin, pageHeight - 12, { align: "right" });
+      return doc;
+    }
+
+    function generatePayslip(idx) {
+      const emp = employees[idx];
+      if (!emp) return;
+      const doc = buildPayslipDoc(emp);
+      doc.save(`${sanitizeFilename(emp.name)}_${sanitizeFilename(emp.month)}.pdf`);
+    }
+
+    function generateCombinedReport() {
+      if (!employees.length) return showToast("No employees to include in the payroll register.");
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: "landscape", unit: "mm" });
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const reportEmployees = employees.map(salarySnapshot);
+      const totals = reportEmployees.reduce((acc, emp) => {
+        acc.gross += Number(emp.gross) || 0;
+        acc.deductions += Number(emp.totalDeductions) || 0;
+        acc.net += Number(emp.netSalary) || 0;
+        acc.pf += Number(emp.pfEmployee) || 0;
+        acc.esi += Number(emp.esiEmployee) || 0;
+        acc.pt += Number(emp.professionalTax) || 0;
+        return acc;
+      }, { gross: 0, deductions: 0, net: 0, pf: 0, esi: 0, pt: 0 });
+
+      doc.setTextColor(15, 23, 42);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);
+      doc.text(companySettings.name || "Payroll Register", 15, 14);
+      doc.setFontSize(12);
+      doc.text("Payroll Register", 15, 22);
+
+      doc.setTextColor(30, 41, 59);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.text(companySettings.address || "", 15, 29);
+      doc.text([companySettings.phone, companySettings.email].filter(Boolean).join(" | "), 15, 34);
+      doc.text("Gujarat PT: Nil up to INR 12,000 monthly gross; INR 200 above INR 12,000.", 15, 39);
+
+      doc.autoTable({
+        startY: 46,
+        head: [["ID", "Name", "Company", "Designation", "Month", "Gross", "PF", "ESI", "PT", "Deductions", "Net"]],
+        body: reportEmployees.map((e) => [
+          e.empId,
+          e.name,
+          e.company,
+          e.designation || "-",
+          e.month,
+          pdfMoney(e.gross),
+          pdfMoney(e.pfEmployee),
+          pdfMoney(e.esiEmployee),
+          pdfMoney(e.professionalTax),
+          pdfMoney(e.totalDeductions),
+          pdfMoney(e.netSalary)
+        ]),
+        foot: [["", "", "", "", "TOTAL", pdfMoney(totals.gross), pdfMoney(totals.pf), pdfMoney(totals.esi), pdfMoney(totals.pt), pdfMoney(totals.deductions), pdfMoney(totals.net)]],
+        theme: "plain",
+        styles: { fontSize: 8, cellPadding: { top: 2.8, right: 4, bottom: 2.8, left: 0 }, textColor: [20, 28, 42] },
+        headStyles: { textColor: [15, 23, 42], fontStyle: "bold" },
+        footStyles: { textColor: [22, 101, 52], fontStyle: "bold" },
+        columnStyles: {
+          5: { cellWidth: 24 },
+          6: { cellWidth: 20 },
+          7: { cellWidth: 20 },
+          8: { cellWidth: 18 },
+          9: { cellWidth: 25 },
+          10: { cellWidth: 25 }
+        },
+        didDrawCell: (data) => {
+          if (data.section === "head" || data.section === "foot") {
+            doc.setDrawColor(203, 213, 225);
+            doc.line(data.cell.x, data.cell.y + data.cell.height, data.cell.x + data.cell.width, data.cell.y + data.cell.height);
+          }
+        },
+        didDrawPage: () => {
+          doc.setFontSize(8);
+          doc.setTextColor(100);
+          doc.text("System generated payroll register", 15, pageHeight - 9);
+        }
+      });
+
+      doc.save(`Payroll_Register_${new Date().toISOString().slice(0, 10)}.pdf`);
+    }
+
+    async function downloadAllPayslips() {
+      if (!employees.length) return showToast("No employees to export.");
+      const zip = new JSZip();
+      employees.forEach((emp) => {
+        const doc = buildPayslipDoc(emp);
+        zip.file(`${sanitizeFilename(emp.name)}_${sanitizeFilename(emp.month)}.pdf`, doc.output("blob"));
+      });
+      const content = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(content);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `payroll_payslips_${new Date().toISOString().slice(0, 10)}.zip`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      showToast("Payslip ZIP created.");
+    }
+
+    function toggleCanteenUI() {
+      refs.canteenSection.classList.toggle("hidden", !refs.canteenToggle.checked);
+    }
+
+    function handleCompanyChange() {
+      if (refs.companySelect.value === "pampashree") {
+        refs.companyName.value = "Pampashree Infotech";
+        refs.companyName.disabled = true;
+      } else {
+        refs.companyName.disabled = false;
+        if (refs.companyName.value === "Pampashree Infotech") refs.companyName.value = "";
+      }
+    }
+
+    function initializeFirebase() {
+      refs.payrollMonth.value = currentMonthKey;
+      refs.month.value = monthKeyToLabel(currentMonthKey);
+
+      if (!isFirebaseConfigured()) {
+        refs.firebaseStatus.textContent = "Firebase is not configured yet. Paste your Firebase config into firebaseConfig inside this HTML file.";
+        refs.loginForm.classList.add("hidden");
+        return;
+      }
+
+      firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      db = firebase.firestore();
+      firebaseReady = true;
+
+      auth.onAuthStateChanged(async (user) => {
+        currentUser = user;
+        if (!user) {
+          refs.loginScreen.classList.remove("hidden");
+          refs.appShell.classList.add("hidden");
+          return;
+        }
+
+        refs.loginScreen.classList.add("hidden");
+        refs.appShell.classList.remove("hidden");
+        refs.signedInText.textContent = `Signed in as ${user.email}`;
+        await migrateLocalDataOnce();
+        await loadEmployeeMasters();
+        await loadPayrollMonth(currentMonthKey);
+      });
+    }
+
+    async function migrateLocalDataOnce() {
+      const migrationKey = `defyn_firebase_migrated_${currentUser.uid}`;
+      if (localStorage.getItem(migrationKey)) return;
+
+      const localEmployees = readJSON(STORAGE.employees, []);
+      const localSettings = readJSON(STORAGE.settings, null);
+      const localLogo = localStorage.getItem(STORAGE.logo) || "";
+      if (!localEmployees.length && !localSettings && !localLogo) {
+        localStorage.setItem(migrationKey, "true");
+        return;
+      }
+
+      const currentSnapshot = await monthDocRef(currentMonthKey).get();
+      if (!currentSnapshot.exists) {
+        employees = localEmployees.map((employee) => salarySnapshot({
+          ...employee,
+          month: employee.month || monthKeyToLabel(currentMonthKey)
+        }));
+        companySettings = localSettings || companySettings;
+        logoBase64 = localLogo;
+        await saveCurrentMonth();
+      }
+      localStorage.setItem(migrationKey, "true");
+    }
+
+    function wireEvents() {
+      ["compName", "compAddress", "compPhone", "compEmail"].forEach((key) => refs[key].addEventListener("change", saveCompanySettings));
+      refs.loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!firebaseReady) return;
+        try {
+          await auth.signInWithEmailAndPassword(refs.loginEmail.value.trim(), refs.loginPassword.value);
+          refs.loginPassword.value = "";
+        } catch (error) {
+          showToast(error.message);
+        }
+      });
+      refs.registerBtnAuth.addEventListener("click", async () => {
+        if (!firebaseReady) return;
+        const email = refs.loginEmail.value.trim();
+        const password = refs.loginPassword.value;
+        if (!email || !password) return showToast("Enter email and password first.");
+        if (password.length < 6) return showToast("Password must be at least 6 characters.");
+        try {
+          await auth.createUserWithEmailAndPassword(email, password);
+          refs.loginPassword.value = "";
+          showToast("Account created and signed in.");
+        } catch (error) {
+          showToast(error.message);
+        }
+      });
+      refs.masterForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        saveMasterEmployee().catch((error) => showToast(error.message));
+      });
+      refs.masterCancelBtn.addEventListener("click", resetMasterForm);
+      refs.loadMasterBtn.addEventListener("click", () => loadActiveMastersIntoPayroll().catch((error) => showToast(error.message)));
+      refs.fillFromMasterBtn.addEventListener("click", fillPayrollFormFromSelectedMaster);
+      refs.masterEmployeeSelect.addEventListener("change", fillPayrollFormFromSelectedMaster);
+      refs.employeeForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        addOrUpdateEmployee();
+      });
+      refs.loadMonthBtn.addEventListener("click", () => loadPayrollMonth(refs.payrollMonth.value || getCurrentMonthKey()));
+      refs.payrollMonth.addEventListener("change", () => {
+        currentMonthKey = refs.payrollMonth.value || getCurrentMonthKey();
+        refs.month.value = monthKeyToLabel(currentMonthKey);
+      });
+      refs.carryForwardBtn.addEventListener("click", carryForwardPreviousMonth);
+      refs.logoutBtn.addEventListener("click", () => auth.signOut());
+      refs.companySelect.addEventListener("change", handleCompanyChange);
+      refs.canteenToggle.addEventListener("change", toggleCanteenUI);
+      refs.logoUpload.addEventListener("change", (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          logoBase64 = ev.target.result;
+          renderLogo();
+          saveCurrentMonth().catch((error) => showToast(error.message));
+          showToast("Logo saved.");
+        };
+        reader.readAsDataURL(file);
+      });
+      $("downloadAllBtn").addEventListener("click", downloadAllPayslips);
+      $("newEntryBtn").addEventListener("click", resetForm);
+      $("registerBtn").addEventListener("click", generateCombinedReport);
+      $("cancelBtn").addEventListener("click", resetForm);
+    }
+
+    window.generatePayslip = generatePayslip;
+    window.editEmployee = editEmployee;
+    window.deleteEmployee = deleteEmployee;
+    window.editMasterEmployee = editMasterEmployee;
+    window.deleteMasterEmployee = deleteMasterEmployee;
+
+    wireEvents();
+    loadCompanySettings();
+    renderLogo();
+    renderMasterTable();
+    handleCompanyChange();
+    renderEmployeeTable();
+    initializeFirebase();
+  </script>
+</body>
+</html>
