@@ -309,6 +309,9 @@
       <span>🧠 Cybersecurity Awareness & Training Programs</span>
       <span>💼 Enterprise Security Consulting</span>
       <span>⚙️ Incident Response & Threat Analysis</span>
+     <span onclick="openPayroll()" style="cursor:pointer; border:1px solid rgba(34,197,94,0.4);">
+       💼 Payroll Management System
+     </span>
     </div>
   </div>
 </div>
@@ -316,7 +319,18 @@
 <div class="blinker-square"></div>
 <div class="online-counter" id="onlineCounter">123 users online</div>
 
-<button class="contact-button" id="contactBtn">Contact Us</button>
+<div style="position:absolute; top:20px; right:20px; display:flex; gap:10px; z-index:2;">
+  
+  <button onclick="openPayroll()" 
+    style="background: linear-gradient(45deg, #22c55e, #16a34a); 
+    color:#fff; border:none; border-radius:6px; padding:10px 15px; 
+    cursor:pointer; font-family:'Inconsolata', monospace; font-weight:bold;">
+    💼 Payroll
+  </button>
+
+  <button class="contact-button" id="contactBtn">Contact Us</button>
+
+</div>
 
 <footer>
   <span>VAPT</span>
@@ -393,6 +407,9 @@ function animate(){
   }
   for(let i=squares.length-1;i>=0;i--){if(squares[i].alpha<=0)squares.splice(i,1);}
   requestAnimationFrame(animate);
+}
+     function openPayroll() {
+  window.location.href = "https://payroll.defyn.site";;
 }
 animate();
 </script>
