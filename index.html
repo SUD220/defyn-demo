@@ -16,40 +16,39 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Replace favicon.png with your browser-tab icon file. Recommended: 512x512 PNG. -->
 <link rel="icon" type="image/png" href="favicon.png">
-<title>
-  Defyn Cybersecurity | Ethical Hacking, VAPT & Security Awareness
-</title>
+<title>Hack4r | Cybersecurity Services, Ethical Hacking & Learning</title>
 
 <!-- SEO Meta Tags -->
-<meta name="description" content="Defyn Cybersecurity provides professional Vulnerability Assessment, Penetration Testing (VAPT), and Security Awareness Training to secure your digital ecosystem.">
-<meta name="keywords" content="cybersecurity, ethical hacking, VAPT, penetration testing, Defyn, security awareness, cybersecurity company India, website security">
+<meta name="description" content="Hack4r provides cybersecurity services, VAPT, ethical hacking, security awareness training, and blog insights for students and professionals.">
+<meta name="keywords" content="Hack4r, cybersecurity services, ethical hacking, VAPT, penetration testing, security awareness, cyber training India, cybersecurity blog, website security">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://defyn.site/">
+<link rel="canonical" href="https://hack4r.in/">
 
 <!-- Open Graph / Facebook -->
-<meta property="og:title" content="Defyn Cybersecurity | Protect Your Digital World">
-<meta property="og:description" content="Next-gen cybersecurity team offering VAPT, Ethical Hacking, and Awareness Programs.">
-<meta property="og:url" content="https://defyn.site/">
-<meta property="og:site_name" content="Defyn Cybersecurity">
+<meta property="og:title" content="Hack4r | Cybersecurity Services & Learning">
+<meta property="og:description" content="Cybersecurity services, VAPT, ethical hacking support, awareness training, and practical daily learning content.">
+<meta property="og:url" content="https://hack4r.in/">
+<meta property="og:site_name" content="Hack4r">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://defyn.site/logo.png">
+<meta property="og:image" content="https://hack4r.in/logo.png">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Defyn Cybersecurity | Ethical Hacking & VAPT Experts">
-<meta name="twitter:description" content="Defyn Cybersecurity — specialized in ethical hacking, VAPT, and awareness training to secure organizations.">
-<meta name="twitter:image" content="https://defyn.site/logo.png">
+<meta name="twitter:title" content="Hack4r | Cybersecurity Services & Ethical Hacking">
+<meta name="twitter:description" content="Hack4r secures organizations with VAPT and awareness services while helping learners grow through cybersecurity blog content.">
+<meta name="twitter:image" content="https://hack4r.in/logo.png">
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "Defyn Cybersecurity",
-  "url": "https://defyn.site",
-  "logo": "https://defyn.site/logo.png",
-  "description": "Defyn Cybersecurity offers VAPT, Ethical Hacking, and Cybersecurity Awareness services to protect businesses from cyber threats.",
+  "name": "Hack4r",
+  "url": "https://hack4r.in",
+  "logo": "https://hack4r.in/logo.png",
+  "description": "Hack4r provides cybersecurity services, VAPT, ethical hacking, awareness training, and cybersecurity blog content for students and professionals.",
   "sameAs": []
 }
 </script>
@@ -57,69 +56,134 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Playfair+Display:wght@400;700&family=Inconsolata:wght@400;700&display=swap');
 
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     margin: 0;
-    padding: 0;
-    height: 100vh;
-    overflow: hidden;
-    background-color: #1a1a1a;
-    font-family: 'Playfair Display', serif;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background:
+      radial-gradient(circle at 18% 14%, rgba(255, 51, 51, 0.15), transparent 28%),
+      radial-gradient(circle at 86% 10%, rgba(51, 51, 255, 0.16), transparent 30%),
+      linear-gradient(145deg, #dfe6ef 0%, #edf2f7 48%, #d8e0eb 100%);
+    color: #111827;
+    font-family: 'Inconsolata', monospace;
   }
 
   canvas {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     z-index: 0;
+    opacity: 0.28;
+    mix-blend-mode: multiply;
   }
 
-  .content {
+  .page-shell {
     position: relative;
     z-index: 1;
+    min-height: 100vh;
+  }
+
+  .site-header {
+    position: absolute;
+    top: 0;
+    z-index: 5;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    max-width: 90%;
-    transform: translateY(30px);
+    justify-content: flex-end;
+    gap: 18px;
+    width: min(1160px, calc(100% - 32px));
+    margin: 16px auto 0;
+    padding: 10px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
-  .logo-pc {
-    width: 100px;
-    margin-bottom: 15px;
-    cursor: pointer;
+  .site-header::before {
+    content: none;
   }
 
-  .logo-pc svg {
-    width: 100%;
-    height: auto;
-    fill: url(#gradient);
-    stroke: url(#gradient);
-    transition: all 0.3s ease;
-  }
-
-  .logo-pc:hover svg {
-    filter: brightness(1.5) drop-shadow(0 0 5px #ff00ff);
+  .brand-lockup {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
   }
 
   .logo-text {
-    font-size: 3rem;
-    font-weight: bold;
-    letter-spacing: 3px;
-    margin-bottom: 1rem;
+    color: #f8fafc;
     cursor: pointer;
     font-family: 'Audiowide', cursive;
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    line-height: 1;
+    text-shadow: 0 0 18px rgba(255, 51, 51, 0.26), 0 0 24px rgba(51, 51, 255, 0.24);
     transition: all 0.2s ease;
   }
 
   .logo-text:hover {
     animation: glitchHover 1.5s infinite;
+  }
+
+  .hero .logo-text {
+    color: #111827;
+    font-size: clamp(2.8rem, 7vw, 5.4rem);
+    line-height: 0.96;
+    text-shadow: 0 12px 30px rgba(17, 24, 39, 0.14);
+  }
+
+  .hero-intel {
+    max-width: 720px;
+  }
+
+  .hero-intel .panel-body {
+    padding: 30px;
+  }
+
+  .hero-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 16px;
+  }
+
+  .logo-space {
+    width: clamp(72px, 10vw, 104px);
+    aspect-ratio: 1;
+    flex: 0 0 auto;
+    border: 1px solid rgba(17, 24, 39, 0.1);
+    border-radius: 8px;
+    background:
+      linear-gradient(135deg, rgba(255, 51, 51, 0.1), rgba(51, 51, 255, 0.1)),
+      rgba(255, 255, 255, 0.72);
+    /* Replace logo.png with your main website logo file. */
+    background-image: url('logo.png'), linear-gradient(135deg, rgba(255, 51, 51, 0.1), rgba(51, 51, 255, 0.1));
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    box-shadow: 0 16px 34px rgba(17, 24, 39, 0.1);
+  }
+
+  .hero-brand-row .logo-text {
+    display: inline-block;
   }
 
   @keyframes glitchHover {
@@ -129,39 +193,107 @@
     75% { text-shadow: -1px 1 #ff5555, 1px -1 #5555ff; transform: translate(1px,0);}
   }
 
-  h1 {
-    font-weight: 400;
-    font-size: 1.8rem;
-    margin: 0.5rem 0;
-    color: #eaeaea;
-    font-style: italic;
-    line-height: 1.5;
-    min-height: 2.2rem;
+  .nav-actions,
+  .top-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
-  .contact-button {
-  background: linear-gradient(45deg, #ff3333, #3333ff);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 15px;
-  cursor: pointer;
-  font-family: 'Inconsolata', monospace;
-  font-weight: bold;
-  transition: transform 0.2s;
-}
+  .header-links {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    padding: 6px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
 
-  .contact-button:hover { transform: scale(1.1); }
+  .header-links a {
+    border-radius: 5px;
+    color: #cbd5e1;
+    font-size: 0.86rem;
+    font-weight: 700;
+    padding: 9px 11px;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+
+  .header-links a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+  }
+
+  .top-buttons {
+    position: static;
+    padding: 6px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 14px 34px rgba(17, 24, 39, 0.1), inset 0 0 0 1px rgba(17, 24, 39, 0.06);
+    backdrop-filter: blur(14px);
+  }
+
+  button,
+  .service-link,
+  .read-link {
+    font-family: 'Inconsolata', monospace;
+  }
+
+  .contact-button,
+  .payroll-button,
+  .learn-button {
+    min-height: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 700;
+    padding: 10px 14px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .contact-button,
+  .learn-button {
+    background: linear-gradient(45deg, rgba(255, 51, 51, 0.95), rgba(51, 51, 255, 0.95));
+    box-shadow: 0 12px 24px rgba(51, 51, 255, 0.16);
+  }
+
+  .payroll-button {
+    background: linear-gradient(45deg, rgba(17, 150, 90, 0.95), rgba(22, 163, 74, 0.95));
+    box-shadow: 0 12px 24px rgba(17, 150, 90, 0.16);
+  }
+
+  .contact-button:hover,
+  .payroll-button:hover,
+  .learn-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 30px rgba(17, 24, 39, 0.16);
+  }
+
+  .status-strip {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.74);
+    box-shadow: 0 12px 28px rgba(17, 24, 39, 0.08);
+    backdrop-filter: blur(12px);
+  }
 
   .blinker-square {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 14px;
-    height: 14px;
-    background: #fff;
-    box-shadow: 0 0 8px #fff, 0 0 16px #fff, 0 0 24px #fff;
-    z-index: 2;
+    width: 10px;
+    height: 10px;
+    background: #ff3333;
+    box-shadow: 0 0 8px rgba(255, 51, 51, 0.65), 0 0 16px rgba(51, 51, 255, 0.28);
     animation: blink 1s infinite;
   }
 
@@ -171,215 +303,720 @@
   }
 
   .online-counter {
-    position: absolute;
-    top: 20px;
-    left: 42px;
-    font-family: 'Inconsolata', monospace;
+    color: #111827;
+    font-size: 0.86rem;
+    white-space: nowrap;
+  }
+
+  main {
+    width: min(1160px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 80px 0 90px;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+    gap: 28px;
+    align-items: center;
+    min-height: 560px;
+  }
+
+  .content {
+    max-width: 720px;
+    text-align: left;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+    color: #d92727;
     font-size: 0.9rem;
-    color: #fff;
-    z-index: 2;
-    text-shadow: 0 0 6px #fff, 0 0 12px #fff;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
   }
 
-  footer {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
+  .eyebrow::before {
+    content: "";
+    display: inline-block;
+    width: 28px;
+    height: 2px;
+    background: linear-gradient(90deg, #ff3333, #3333ff);
+  }
+
+  h1 {
+    min-height: 2.2rem;
+    margin: 0.5rem 0;
+    color: #1f2937;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.25rem, 2.4vw, 1.9rem);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.45;
+  }
+
+  .hero-subtitle {
+    max-width: 680px;
+    margin: 18px 0 0;
+    color: #374151;
+    font-size: 1.04rem;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
     display: flex;
-    justify-content: space-around;
-    font-family: 'Inconsolata', monospace;
-    font-size: 0.8rem;
-    color: #888;
-    letter-spacing: 1px;
-    z-index: 2;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
   }
 
-  footer span { white-space: nowrap; }
+  .ghost-button {
+    min-height: 38px;
+    border: 1px solid rgba(17, 24, 39, 0.14);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.7);
+    color: #111827;
+    cursor: pointer;
+    font-weight: 700;
+    padding: 10px 14px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
 
-  .sections {
+  .ghost-button:hover {
+    border-color: rgba(255, 51, 51, 0.32);
+    transform: translateY(-2px);
+  }
+
+  .hero-panel {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 22px 60px rgba(17, 24, 39, 0.12);
+    backdrop-filter: blur(18px);
+  }
+
+  .hero-panel,
+  .operation-panel {
+    isolation: isolate;
+  }
+
+  .operation-panel {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.84);
+    box-shadow: 0 22px 60px rgba(17, 24, 39, 0.12);
+    backdrop-filter: blur(18px);
+    text-align: left;
+    transition: all 0.35s ease;
+  }
+
+  .operation-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-top: 4px solid transparent;
+    border-image: linear-gradient(90deg, #ff3333, #3333ff) 1;
+    pointer-events: none;
+  }
+
+  .operation-panel:hover {
+    border-color: rgba(255, 51, 51, 0.16);
+    box-shadow: 0 26px 64px rgba(17, 24, 39, 0.16);
+    transform: translateY(-3px);
+  }
+
+  .hero-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-top: 4px solid transparent;
+    border-image: linear-gradient(90deg, #ff3333, #3333ff) 1;
+    pointer-events: none;
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px;
+    border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+    background: #101827;
+  }
+
+  .panel-title {
+    color: #f8fafc;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-right: auto;
+  }
+
+  .panel-title h2 {
+    margin: 0;
+    color: #f8fafc;
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  .panel-status {
+    color: #11965a;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: rgba(17, 24, 39, 0.08);
+  }
+
+  .metric {
+    min-height: 120px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.86);
+  }
+
+  .metric,
+  .service-list span,
+  .service-link,
+  .daily-content {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metric::before,
+  .service-list span::before,
+  .service-link::before,
+  .daily-content::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: linear-gradient(180deg, #ff3333, #3333ff);
+  }
+
+  .metric strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #111827;
+    font-family: 'Audiowide', cursive;
+    font-size: 1.65rem;
+    letter-spacing: 1px;
+  }
+
+  .metric span {
+    color: #4b5563;
+    font-size: 0.9rem;
+  }
+
+  .terminal-card {
+    margin: 18px;
+    padding: 18px;
+    border-radius: 8px;
+    background: #101827;
+    color: #d7e3ff;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+
+  .terminal-card p {
+    margin: 8px 0 0;
+    color: #9fb2d4;
+    line-height: 1.5;
+  }
+
+  .terminal-prompt {
+    color: #ff7777;
+    font-weight: 700;
+  }
+
+  .sections,
+  .learning-section {
     position: relative;
     z-index: 2;
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
-    width: 80%;
-    margin-top: 40px;
+    margin-top: 34px;
   }
 
-  .about, .services {
-    flex: 1;
-    margin: 10px;
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(6px);
-    transition: all 0.4s ease;
-    text-align: left;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+  .sections {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 18px;
   }
 
-  .about:hover, .services:hover {
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-    transform: translateY(-3px);
-    border-color: rgba(255, 255, 255, 0.2);
+  .about,
+  .services,
+  .daily-content {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
   }
 
-  .about h2, .services h2 {
-    color: #ff3333;
-    font-size: 1.4rem;
-    font-family: 'Inconsolata', monospace;
-    margin-bottom: 10px;
+  .about,
+  .services {
+    padding: 0;
   }
 
-  .about p {
-    color: #ccc;
-    font-size: 0.95rem;
-    line-height: 1.6;
+  .about h2,
+  .services h2,
+  .learning-section h2 {
+    margin: 0 0 12px;
+    color: #d92727;
+    font-size: 1.35rem;
+  }
+
+  .about p,
+  .learning-intro {
+    color: #374151;
+    font-size: 0.96rem;
+    line-height: 1.65;
+  }
+
+  .panel-body {
+    padding: 24px;
+  }
+
+  .panel-body > h2 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .about-terminal {
+    margin-top: 18px;
+    padding: 16px;
+    border-radius: 8px;
+    background: #101827;
+    color: #9fb2d4;
+    line-height: 1.55;
+  }
+
+  .about-terminal strong {
+    color: #ff7777;
   }
 
   .service-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
   }
 
-  .service-list span {
-    background: rgba(255,255,255,0.02);
-    padding: 6px 10px;
+  .service-list span,
+  .service-link {
+    display: flex;
+    align-items: center;
+    min-height: 58px;
+    border: 1px solid rgba(17, 24, 39, 0.08);
     border-radius: 6px;
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(248, 250, 252, 0.92)),
+      #f8fafc;
+    color: #1f2937;
     font-size: 0.9rem;
-    color: #eee;
+    line-height: 1.35;
+    padding: 12px;
+    text-decoration: none;
     transition: 0.3s;
   }
 
-  .service-list span:hover {
-    background: rgba(255,51,51,0.15);
-    transform: translateX(5px);
+  .service-list span:hover,
+  .service-link:hover {
+    border-color: rgba(255, 51, 51, 0.18);
+    background: linear-gradient(90deg, rgba(255,51,51,0.1), rgba(51,51,255,0.08));
+    transform: translateY(-2px);
   }
 
-  @media (max-width: 900px) {
-    body { overflow-y: auto; height: auto; padding-bottom: 80px; }
-    .sections { flex-direction: column; align-items: center; width: 95%; }
-    .about, .services { width: 100%; }
-    .logo-text { font-size: 2.2rem; }
-    h1 { font-size: 1.2rem; line-height: 1.4; }
-    .contact-button { top: 10px; right: 10px; padding: 8px 12px; font-size: 0.8rem; }
-    .blinker-square { top: 10px; left: 10px; width: 10px; height: 10px; }
-    .online-counter { top: 10px; left: 28px; font-size: 0.8rem; }
-    footer { flex-direction: column; align-items: center; gap: 5px; font-size: 0.7rem; bottom: 10px; }
+  .learning-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 0;
+    padding: 20px 22px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: #101827;
   }
-     .top-buttons {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  display: flex;
-  gap: 10px;
-  z-index: 2;
-}
 
-/* override old absolute */
-.contact-button {
-  position: relative;
-}
+  .learning-header h2 {
+    flex: 0 0 auto;
+    color: #f8fafc;
+    margin-bottom: 0;
+  }
 
-/* new payroll button */
-.payroll-button {
-  background: linear-gradient(45deg, #22c55e, #16a34a);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 15px;
-  cursor: pointer;
-  font-family: 'Inconsolata', monospace;
-  font-weight: bold;
-  transition: transform 0.2s;
-}
+  .learning-intro {
+    color: #9fb2d4;
+    max-width: 720px;
+    margin: 0;
+  }
 
-.payroll-button:hover {
-  transform: scale(1.1);
-}
+  .learning-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.84);
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    border-top: 0;
+    border-radius: 0 0 8px 8px;
+  }
 
-/* FIX SERVICE LINK (remove ugly green) */
-.service-link {
-  display: block;
-  background: rgba(255,255,255,0.02);
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  color: #eee;
-  text-decoration: none;
-  transition: 0.3s;
-}
+  .daily-content {
+    display: flex;
+    min-height: 240px;
+    flex-direction: column;
+    padding: 22px;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    border-radius: 8px;
+    background:
+      linear-gradient(180deg, rgba(16, 24, 39, 0.035), transparent 34%),
+      #ffffff;
+    box-shadow: 0 14px 36px rgba(17, 24, 39, 0.08);
+  }
 
-.service-link:hover {
-  background: rgba(255,51,51,0.15);
-  transform: translateX(5px);
-}
+  .post-date {
+    display: inline-block;
+    width: fit-content;
+    margin-bottom: 14px;
+    border-radius: 999px;
+    background: rgba(51, 51, 255, 0.08);
+    color: #3333cc;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 6px 10px;
+    text-transform: uppercase;
+  }
+
+  .daily-content h3 {
+    margin: 0 0 10px;
+    color: #111827;
+    font-size: 1.15rem;
+  }
+
+  .daily-content p {
+    flex: 1;
+    margin: 0 0 18px;
+    color: #374151;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .read-link {
+    border: 0;
+    background: transparent;
+    color: #d92727;
+    cursor: pointer;
+    font-weight: 700;
+    padding: 0;
+    text-decoration: none;
+  }
+
+  .read-link:hover {
+    color: #3333cc;
+  }
+
+  .blog-full {
+    display: none;
+    margin-top: 14px;
+    border-top: 1px solid rgba(17, 24, 39, 0.08);
+    padding-top: 14px;
+  }
+
+  .blog-full.open {
+    display: block;
+  }
+
+  footer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-around;
+    gap: 16px;
+    width: 100%;
+    padding: 26px 20px;
+    border-top: 4px solid transparent;
+    border-image: linear-gradient(90deg, #ff3333, #3333ff) 1;
+    background: #101827;
+    color: #9fb2d4;
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    box-shadow: 0 -18px 46px rgba(17, 24, 39, 0.12);
+  }
+
+  footer span {
+    white-space: nowrap;
+  }
+
+  .post-tools {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .post-tools input,
+  .post-tools textarea {
+    width: 100%;
+    border: 1px solid rgba(17, 24, 39, 0.12);
+    border-radius: 6px;
+    background: #ffffff;
+    color: #111827;
+    font-family: 'Inconsolata', monospace;
+    padding: 10px;
+  }
+
+  .post-tools textarea {
+    min-height: 90px;
+    resize: vertical;
+  }
+
+  .post-tools .wide {
+    grid-column: span 2;
+  }
+
+  .daily-manager {
+    margin-top: 18px;
+    border-top: 1px solid rgba(17, 24, 39, 0.08);
+    background: linear-gradient(180deg, rgba(16, 24, 39, 0.035), rgba(255, 255, 255, 0.2));
+  }
+
+  .daily-manager .panel-header {
+    border-radius: 0;
+  }
+
+  .daily-manager-body {
+    padding: 24px;
+  }
+
+  @media (max-width: 980px) {
+    .site-header {
+      align-items: flex-end;
+      flex-direction: row;
+      margin-top: 10px;
+    }
+
+    .status-strip {
+      display: none;
+    }
+
+    .top-buttons {
+      flex-wrap: wrap;
+      width: auto;
+    }
+
+    .contact-button,
+    .payroll-button,
+    .learn-button {
+      flex: 1 1 120px;
+    }
+
+    main {
+      padding-top: 46px;
+    }
+
+    .hero,
+    .sections,
+    .learning-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .learning-header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .service-list {
+      grid-template-columns: 1fr;
+    }
+
+    .post-tools {
+      grid-template-columns: 1fr;
+    }
+
+    .post-tools .wide {
+      grid-column: auto;
+    }
+
+    footer {
+      align-items: center;
+      flex-direction: column;
+      font-size: 0.7rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .logo-text {
+      font-size: 1.35rem;
+    }
+
+    .hero {
+      min-height: auto;
+    }
+
+    .metric-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .header-links {
+      display: none;
+    }
+  }
 </style>
 </head>
 <body>
 <canvas id="bgCanvas"></canvas>
 
-<div class="content">
-  <div class="logo-pc">
-    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#ff3333"/>
-          <stop offset="100%" stop-color="#3333ff"/>
-        </linearGradient>
-      </defs>
-      <rect x="4" y="4" width="56" height="40" rx="2" ry="2" stroke="url(#gradient)" stroke-width="2" fill="none"/>
-      <rect x="16" y="46" width="32" height="6" fill="url(#gradient)" rx="1"/>
-      <circle cx="32" cy="18" r="5" fill="url(#gradient)"/>
-      <path d="M24 28 Q32 18, 40 28 Q32 36, 24 28 Z" fill="url(#gradient)"/>
-    </svg>
-  </div>
-  <div class="logo-text">DEFYN</div>
-  <h1 id="typed-text"></h1>
-</div>
-
-<div class="sections">
-  <div class="about">
-    <h2>About Us</h2>
-    <p>Defyn is a next-gen cybersecurity organization dedicated to protecting digital ecosystems. Our team blends ethical hacking, automation, and innovation to identify and neutralize vulnerabilities before attackers can exploit them.</p>
+<div class="page-shell">
+  <div class="status-strip">
+    <div class="blinker-square"></div>
+    <div class="online-counter" id="onlineCounter">123 visitors online</div>
   </div>
 
-  <div class="services">
-    <h2>Our Services</h2>
-    <div class="service-list">
-      <span>🔒 Vulnerability Assessment & Penetration Testing (VAPT)</span>
-      <span>🧠 Cybersecurity Awareness & Training Programs</span>
-      <span>💼 Enterprise Security Consulting</span>
-      <span>⚙️ Incident Response & Threat Analysis</span>
-      <a href="/payroll" target="_blank" class="service-link">
-       🧾 Payroll Management System
-      </a>
+  <header class="site-header">
+    <nav class="header-links" aria-label="Primary">
+      <a href="#services">Services</a>
+      <a href="https://medium.com/@sudarshanyadav719" target="_blank" rel="noopener">Blog Posts</a>
+      <a href="#about">About</a>
+    </nav>
+
+    <div class="top-buttons">
+      <button class="learn-button" onclick="window.open('https://medium.com/@sudarshanyadav719','_blank','noopener')">Blog Posts</button>
+      <button class="contact-button" id="contactBtn">Contact</button>
+      <!-- Change /payroll below if your payroll system URL changes. -->
+      <button class="payroll-button" onclick="window.open('/payroll','_blank')">Payroll</button>
     </div>
-  </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="content operation-panel hero-intel">
+        <div class="panel-header">
+          <span class="panel-title">Hack4r Command</span>
+          <span class="panel-status">ONLINE</span>
+        </div>
+        <div class="panel-body">
+          <span class="eyebrow">Cybersecurity services and learning</span>
+          <div class="hero-brand-row">
+            <div class="logo-space" aria-label="Logo space"></div>
+            <div class="logo-text">HACK4R</div>
+          </div>
+          <h1 id="typed-text"></h1>
+          <p class="hero-subtitle">A cybersecurity company helping businesses secure their digital systems while giving students and professionals a practical place to learn ethical hacking, VAPT, and digital defense.</p>
+          <div class="hero-actions">
+            <button class="contact-button" onclick="document.getElementById('contactBtn').click()">Start Security Review</button>
+            <button class="ghost-button" onclick="window.open('https://medium.com/@sudarshanyadav719','_blank','noopener')">Read Blog Posts</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-panel">
+        <div class="panel-header">
+          <span class="panel-title">Security Operations</span>
+          <span class="panel-status">ACTIVE</span>
+        </div>
+        <div class="metric-grid">
+          <div class="metric">
+            <strong>VAPT</strong>
+            <span>Testing for websites, apps, and networks</span>
+          </div>
+          <div class="metric">
+            <strong>IR</strong>
+            <span>Threat analysis and response guidance</span>
+          </div>
+          <div class="metric">
+            <strong>LABS</strong>
+            <span>Practical learning for ethical hackers</span>
+          </div>
+          <div class="metric">
+            <strong>365</strong>
+            <span>Blog content and awareness support</span>
+          </div>
+        </div>
+        <div class="terminal-card">
+          <span class="terminal-prompt">hack4r@secure:~$</span> assess --protect --teach
+          <p>Services for organizations. Learning paths for students. Security awareness for everyone.</p>
+        </div>
+      </aside>
+    </section>
+
+    <div class="sections">
+      <div class="about operation-panel" id="about">
+        <div class="panel-header">
+          <span class="panel-title"><h2>About Us</h2></span>
+          <span class="panel-status">SECURE</span>
+        </div>
+        <div class="panel-body">
+          <h2>About Us</h2>
+          <p>Hack4r is a cybersecurity services and learning company focused on protecting digital ecosystems with practical, responsible security work. We support organizations with VAPT, security consulting, incident guidance, and awareness programs that reduce real-world risk.</p>
+          <p>Alongside our services, we publish cybersecurity blog content for students, beginners, and professionals who want to build strong technical foundations. Our mission is simple: secure businesses, train people, and grow a responsible security community.</p>
+          <div class="about-terminal">
+            <strong>mission:</strong> protect businesses, train people, and build a responsible security community.
+          </div>
+        </div>
+      </div>
+
+      <div class="services operation-panel" id="services">
+        <div class="panel-header">
+          <span class="panel-title"><h2>Our Services</h2></span>
+          <span class="panel-status">READY</span>
+        </div>
+        <div class="panel-body">
+          <h2>Our Services</h2>
+          <div class="service-list">
+            <span>Vulnerability Assessment & Penetration Testing (VAPT)</span>
+            <span>Website, Application & Network Security Testing</span>
+            <span>Security Awareness Workshops for Teams & Students</span>
+            <span>Incident Response Guidance & Threat Analysis</span>
+            <span>Ethical Hacking Training, Labs & Career Mentorship</span>
+            <span>Cybersecurity Blog Content, Tools & Case Studies</span>
+            <!-- Change /payroll below if your payroll system URL changes. -->
+            <a href="/payroll" target="_blank" class="service-link">Payroll Management System</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="learning-section operation-panel" id="blog">
+      <div class="learning-header">
+        <div class="panel-title"><h2>Blog Posts</h2></div>
+      </div>
+
+      <div class="learning-grid" id="blogPosts">
+        <article class="daily-content">
+          <span class="post-date">Medium</span>
+          <h3>Hack4r Blog on Medium</h3>
+          <p>Read the latest cybersecurity posts, notes, and learning content published on Medium.</p>
+          <a href="https://medium.com/@sudarshanyadav719" target="_blank" rel="noopener" class="read-link">Open Medium blog</a>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>VAPT</span>
+    <span>Cybersecurity Services</span>
+    <span>Learning Hub</span>
+    <span>(C) COPYRIGHT 2026 HACK4R</span>
+  </footer>
 </div>
-
-<div class="blinker-square"></div>
-<div class="online-counter" id="onlineCounter">123 users online</div>
-
-<div class="top-buttons">
-  <button class="contact-button" id="contactBtn">Contact</button>
-  <button class="payroll-button" onclick="window.open('/payroll','_blank')">Payroll</button>
-</div>
-
-<footer>
-  <span>VAPT</span>
-  <span>Cybersecurity</span>
-  <span>Awareness</span>
-  <span>© COPYRIGHT 2025 DEFYN</span>
-</footer>
 
 <script>
 document.getElementById('contactBtn').addEventListener('click', () => {
   window.open('https://forms.gle/r8uKGkfLShxHwoGg7', '_blank');
 });
-const text = "Securing your digital world with VAPT, Training & Awareness Programs.";
+
+const text = "Cybersecurity services, ethical hacking, VAPT & security blog insights.";
 const typedEl = document.getElementById('typed-text');
 let index = 0;
 function type() {
@@ -390,25 +1027,30 @@ function type() {
   }
 }
 type();
+
 const onlineCounter = document.getElementById('onlineCounter');
 setInterval(() => {
   const users = Math.floor(Math.random() * 50 + 100);
-  onlineCounter.textContent = `${users} users online`;
+  onlineCounter.textContent = `${users} visitors online`;
 }, 3000);
+
 const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
 let w = canvas.width = window.innerWidth;
 let h = canvas.height = window.innerHeight;
 window.addEventListener('resize', () => { w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; });
+
 const particles = [];
 for(let i=0;i<60;i++){
   particles.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,vx:(Math.random()-0.5)*0.2,vy:(Math.random()-0.5)*0.2});
 }
+
 const squares = [];
 window.addEventListener('mousemove', e=>{
   squares.push({x:e.clientX + (Math.random()*7-3), y:e.clientY + (Math.random()*7-3), size: Math.random()*6+2, alpha:1, color: Math.random()<0.5?'#ff3333':'#3333ff'});
   if(squares.length>200) squares.shift();
 });
+
 function animate(){
   ctx.clearRect(0,0,w,h);
   for(let p of particles){
@@ -444,9 +1086,12 @@ function animate(){
   for(let i=squares.length-1;i>=0;i--){if(squares[i].alpha<=0)squares.splice(i,1);}
   requestAnimationFrame(animate);
 }
-     function openPayroll() {
-  window.location.href = "https://payroll.defyn.site";;
+
+function openPayroll() {
+  // Change this if your payroll subdomain changes.
+  window.location.href = "https://payroll.hack4r.in";
 }
+
 animate();
 </script>
 </body>
