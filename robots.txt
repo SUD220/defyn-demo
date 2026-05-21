@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://defyn.site/sitemap.xml
+Sitemap: https://hack4r.in/sitemap.xml
