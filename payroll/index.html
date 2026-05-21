@@ -4,7 +4,7 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Defyn Payroll | HR Salary Suite</title>
+  <title>Hack4R Payroll App</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -101,12 +101,14 @@
     .btn-muted { background: #1e293b; color: #dbeafe; border-color: #334155; }
     .btn-muted:hover { background: #263449; }
     .btn-icon {
-      width: 34px;
+      width: 46px;
       min-height: 34px;
-      padding: 0;
+      padding: 0 7px;
       border-radius: 7px;
       background: #162234;
       border: 1px solid #2f4058;
+      font-size: 12px;
+      font-weight: 800;
     }
 
     .section-title {
@@ -182,7 +184,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 820px;
+      min-width: 920px;
     }
 
     th {
@@ -254,6 +256,7 @@
       .shell { width: min(100% - 20px, 1320px); padding-top: 16px; }
       .stat { border-left: 0; padding-left: 0; }
       .btn { width: 100%; }
+      .btn-icon { width: auto; }
       .month-bar { grid-template-columns: 1fr; }
     }
   </style>
@@ -261,7 +264,7 @@
 <body>
   <section id="loginScreen" class="login-screen">
     <div class="login-card">
-      <p class="mb-1 text-xs font-extrabold uppercase tracking-[0.18em] text-sky-300">Defyn Payroll</p>
+      <p class="mb-1 text-xs font-extrabold uppercase tracking-[0.18em] text-sky-300">Hack4R Payroll App</p>
       <h1 class="m-0 text-2xl font-black text-white">Sign in to Payroll</h1>
       <p id="firebaseStatus" class="mt-2 text-sm text-slate-400">Use your Firebase email and password to access company payroll records.</p>
       <form id="loginForm" class="mt-5 grid gap-3">
@@ -282,7 +285,7 @@
   <main id="appShell" class="shell hidden">
     <header class="mb-5 flex flex-col gap-4 border-b border-slate-700 pb-5 lg:flex-row lg:items-end lg:justify-between">
       <div>
-        <p class="mb-1 text-xs font-extrabold uppercase tracking-[0.18em] text-sky-300">Defyn Payroll</p>
+        <p class="mb-1 text-xs font-extrabold uppercase tracking-[0.18em] text-sky-300">Hack4R Payroll App</p>
         <h1 class="m-0 text-3xl font-black tracking-normal text-white sm:text-4xl">Professional Salary Management</h1>
         <p class="mt-2 max-w-2xl text-sm text-slate-400">Build payslips, statutory deductions, registers, and ZIP exports with secure Firebase storage.</p>
       </div>
@@ -350,7 +353,7 @@
           <h2 class="section-title mb-1"><span class="title-bar"></span>Employee Master</h2>
           <p class="m-0 text-sm text-slate-400">Store permanent employee details once, then load active employees into any payroll month.</p>
         </div>
-          <button id="loadMasterBtn" class="btn btn-indigo" type="button">Load Active Employees</button>
+        <button id="loadMasterBtn" class="btn btn-indigo" type="button">Load Active Employees</button>
       </div>
 
       <form id="masterForm" class="mt-5">
@@ -438,7 +441,7 @@
       <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h2 class="section-title mb-1"><span class="title-bar"></span>Monthly Payroll Entry</h2>
-          <p class="m-0 text-sm text-slate-400">Select an employee from master, then update only monthly days, canteen and exceptions.</p>
+          <p class="m-0 text-sm text-slate-400">Select an employee from master, then update wage sheet days, rates, performance points, canteen and deductions.</p>
         </div>
         <div class="grid gap-4 sm:grid-cols-3">
           <div class="stat">
@@ -447,11 +450,11 @@
           </div>
           <div class="stat">
             <span>Gross</span>
-            <strong id="statGross">₹ 0.00</strong>
+            <strong id="statGross">INR 0.00</strong>
           </div>
           <div class="stat">
             <span>Net</span>
-            <strong id="statNet">₹ 0.00</strong>
+            <strong id="statNet">INR 0.00</strong>
           </div>
         </div>
       </div>
@@ -467,7 +470,7 @@
           <button id="fillFromMasterBtn" class="btn btn-muted" type="button">Fill Payroll Form</button>
         </div>
 
-        <div class="grid gap-3 lg:grid-cols-4">
+        <div class="mt-4 grid gap-3 lg:grid-cols-4">
           <div class="lg:col-span-2">
             <label class="label" for="month">Pay Period</label>
             <input id="month" class="field" placeholder="April 2026">
@@ -504,14 +507,22 @@
           </div>
         </div>
 
-        <div class="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-5">
+        <div class="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-6">
           <div>
             <label class="label" for="rate">Daily Rate</label>
-            <input id="rate" class="field" type="number" min="0" step="0.01" placeholder="₹">
+            <input id="rate" class="field" type="number" min="0" step="0.01" placeholder="INR">
           </div>
           <div>
             <label class="label" for="days">Days Worked</label>
             <input id="days" class="field" type="number" min="0" max="31" step="0.5" placeholder="26">
+          </div>
+          <div>
+            <label class="label" for="pfRate">PF Rate</label>
+            <input id="pfRate" class="field" type="number" min="0" step="0.01" value="501.5" placeholder="501.5">
+          </div>
+          <div>
+            <label class="label" for="fixRateNote">Fix Rate Note</label>
+            <input id="fixRateNote" class="field" placeholder="20000/M 12 hrs">
           </div>
           <div>
             <label class="label" for="pan">PAN</label>
@@ -527,9 +538,39 @@
           </div>
         </div>
 
+        <div class="mt-4 rounded border border-slate-700 bg-slate-950/40 p-4">
+          <h3 class="m-0 mb-3 text-sm font-black text-white">Performance Allowance</h3>
+          <div class="grid gap-3 md:grid-cols-3 lg:grid-cols-6">
+            <div>
+              <label class="label" for="productivityScore">Productivity / 40</label>
+              <input id="productivityScore" class="field" type="number" min="0" max="40" step="0.5" value="0">
+            </div>
+            <div>
+              <label class="label" for="housekeepingScore">Housekeeping / 20</label>
+              <input id="housekeepingScore" class="field" type="number" min="0" max="20" step="0.5" value="0">
+            </div>
+            <div>
+              <label class="label" for="qualityScore">Quality / 20</label>
+              <input id="qualityScore" class="field" type="number" min="0" max="20" step="0.5" value="0">
+            </div>
+            <div>
+              <label class="label" for="safetyScore">Safety / 20</label>
+              <input id="safetyScore" class="field" type="number" min="0" max="20" step="0.5" value="0">
+            </div>
+            <div>
+              <label class="label" for="performancePoints">Points</label>
+              <input id="performancePoints" class="field" type="number" value="0" readonly>
+            </div>
+            <div>
+              <label class="label" for="performanceBonus">Performance Allowance</label>
+              <input id="performanceBonus" class="field" type="number" value="0" readonly>
+            </div>
+          </div>
+        </div>
+
         <div class="mt-5 flex flex-wrap gap-5 border-t border-slate-700 pt-4">
-          <label class="toggle"><input id="pfToggle" type="checkbox">PF at 12% on basic</label>
-          <label class="toggle"><input id="esiToggle" type="checkbox" checked>ESI when gross is ₹21,000 or below</label>
+          <label class="toggle"><input id="pfToggle" type="checkbox">PF at 12% on PF wages</label>
+          <label class="toggle"><input id="esiToggle" type="checkbox" checked>ESI at 0.75% on total gross</label>
           <label class="toggle"><input id="ptToggle" type="checkbox" checked>Gujarat professional tax</label>
           <label class="toggle"><input id="canteenToggle" type="checkbox">Canteen deduction</label>
         </div>
@@ -537,19 +578,52 @@
         <div id="canteenSection" class="mt-4 hidden rounded border border-slate-700 bg-slate-950/50 p-4">
           <div class="grid gap-3 md:grid-cols-3">
             <div>
-              <label class="label" for="tea">Tea Days</label>
-              <input id="tea" class="field text-center" type="number" min="0" value="0">
+              <label class="label" for="tea">Tea Amount</label>
+              <input id="tea" class="field text-center" type="number" min="0" step="0.01" value="0">
             </div>
             <div>
-              <label class="label" for="breakfast">Breakfast Days</label>
-              <input id="breakfast" class="field text-center" type="number" min="0" value="0">
+              <label class="label" for="breakfast">Snack Amount</label>
+              <input id="breakfast" class="field text-center" type="number" min="0" step="0.01" value="0">
             </div>
             <div>
-              <label class="label" for="lunch">Lunch Days</label>
-              <input id="lunch" class="field text-center" type="number" min="0" value="0">
+              <label class="label" for="lunch">Lunch Amount</label>
+              <input id="lunch" class="field text-center" type="number" min="0" step="0.01" value="0">
             </div>
           </div>
-          <p class="mb-0 mt-3 text-xs font-semibold text-slate-400">Canteen is calculated at ₹25 per selected meal component.</p>
+          <p class="mb-0 mt-3 text-xs font-semibold text-slate-400">Canteen total follows the wage sheet as Tea + Snack + Lunch amounts.</p>
+        </div>
+
+        <div class="mt-4 rounded border border-slate-700 bg-slate-950/40 p-4">
+          <h3 class="m-0 mb-3 text-sm font-black text-white">Wage Sheet Deductions</h3>
+          <div class="grid gap-3 md:grid-cols-3 lg:grid-cols-6">
+            <div>
+              <label class="label" for="lwf">LWF</label>
+              <input id="lwf" class="field" type="number" min="0" step="0.01" value="0">
+            </div>
+            <div>
+              <label class="label" for="advance">Advance</label>
+              <input id="advance" class="field" type="number" min="0" step="0.01" value="0">
+            </div>
+            <div>
+              <label class="label" for="companySalaryAdvance">Company Salary Adv.</label>
+              <input id="companySalaryAdvance" class="field" type="number" min="0" step="0.01" value="0">
+            </div>
+            <div>
+              <label class="label" for="safetyDeduction">Safety/Medical Ded.</label>
+              <input id="safetyDeduction" class="field" type="number" min="0" step="0.01" value="0">
+            </div>
+            <div>
+              <label class="label" for="otherDeduction">Other Deduction</label>
+              <input id="otherDeduction" class="field" type="number" min="0" step="0.01" value="0">
+            </div>
+            <div>
+              <label class="label" for="siteName">Site</label>
+              <select id="siteName" class="field">
+                <option value="GARADHIA">GARADHIA</option>
+                <option value="KANDARI">KANDARI</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         <div class="mt-5 grid gap-3 sm:grid-cols-[1fr_auto]">
@@ -576,6 +650,7 @@
               <th>Company</th>
               <th>Designation</th>
               <th class="amount">Gross</th>
+              <th class="amount">Bonus</th>
               <th class="amount">PT</th>
               <th class="amount">Deductions</th>
               <th class="amount">Net</th>
@@ -592,8 +667,6 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
-    // 1) Paste your Firebase web app config here.
-    // Firebase Console -> Project settings -> Your apps -> Web app -> SDK setup and configuration -> Config.
     const firebaseConfig = {
       apiKey: "AIzaSyB2IDOTiYYxX0OP3zKZEUPgxUKxPwB_2eM",
       authDomain: "payroll-c53a5.firebaseapp.com",
@@ -621,10 +694,10 @@
     let firebaseReady = false;
     let currentMonthKey = getCurrentMonthKey();
     let companySettings = {
-      name: "Defyn Technologies",
+      name: "Hack4R Payroll App",
       address: "Bangalore, India",
       phone: "+91 98765 43210",
-      email: "hr@defyn.com"
+      email: "hr@hack4r.com"
     };
 
     const $ = (id) => document.getElementById(id);
@@ -676,6 +749,14 @@
       department: $("department"),
       rate: $("rate"),
       days: $("days"),
+      pfRate: $("pfRate"),
+      fixRateNote: $("fixRateNote"),
+      productivityScore: $("productivityScore"),
+      housekeepingScore: $("housekeepingScore"),
+      qualityScore: $("qualityScore"),
+      safetyScore: $("safetyScore"),
+      performancePoints: $("performancePoints"),
+      performanceBonus: $("performanceBonus"),
       pan: $("pan"),
       uan: $("uan"),
       bankAccount: $("bankAccount"),
@@ -687,6 +768,12 @@
       tea: $("tea"),
       breakfast: $("breakfast"),
       lunch: $("lunch"),
+      lwf: $("lwf"),
+      advance: $("advance"),
+      companySalaryAdvance: $("companySalaryAdvance"),
+      safetyDeduction: $("safetyDeduction"),
+      otherDeduction: $("otherDeduction"),
+      siteName: $("siteName"),
       logoUpload: $("logoUpload"),
       logoPreviewArea: $("logoPreviewArea"),
       logoPreviewImg: $("logoPreviewImg"),
@@ -762,7 +849,7 @@
 
     function saveCompanySettings() {
       companySettings = {
-        name: refs.compName.value.trim() || "Defyn Technologies",
+        name: refs.compName.value.trim() || "Hack4R Payroll App",
         address: refs.compAddress.value.trim() || "Registered Office",
         phone: refs.compPhone.value.trim(),
         email: refs.compEmail.value.trim()
@@ -787,7 +874,7 @@
         const snapshot = await monthDocRef(currentMonthKey).get();
         if (snapshot.exists) {
           const data = snapshot.data();
-          employees = Array.isArray(data.employees) ? data.employees : [];
+          employees = Array.isArray(data.employees) ? data.employees.map(salarySnapshot) : [];
           companySettings = data.companySettings || companySettings;
           logoBase64 = data.logoBase64 || "";
         } else {
@@ -826,15 +913,12 @@
 
         const previousData = previousSnapshot.data();
         const monthLabel = monthKeyToLabel(currentMonthKey);
-        employees = previousData.employees.map((employee) => {
-          const copied = {
-            ...employee,
-            month: monthLabel,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-          };
-          return salarySnapshot(copied);
-        });
+        employees = previousData.employees.map((employee) => salarySnapshot({
+          ...employee,
+          month: monthLabel,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }));
         companySettings = previousData.companySettings || companySettings;
         logoBase64 = previousData.logoBase64 || logoBase64;
         await saveCurrentMonth();
@@ -997,6 +1081,14 @@
         bankAccount: master.bankAccount || "",
         rate: Number(master.rate) || 0,
         days: Number(master.defaultDays) || 0,
+        pfRate: 501.5,
+        fixRateNote: "",
+        productivityScore: 0,
+        housekeepingScore: 0,
+        qualityScore: 0,
+        safetyScore: 0,
+        performancePoints: 0,
+        performanceBonus: 0,
         pfEnabled: Boolean(master.pfEnabled),
         esiEnabled: master.esiEnabled !== false,
         ptEnabled: master.ptEnabled !== false,
@@ -1004,6 +1096,12 @@
         teaDays: 0,
         breakfastDays: 0,
         lunchDays: 0,
+        lwf: 0,
+        advance: 0,
+        companySalaryAdvance: 0,
+        safetyDeduction: 0,
+        otherDeduction: 0,
+        siteName: "GARADHIA",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       });
@@ -1032,6 +1130,14 @@
       refs.department.value = e.department || "";
       refs.rate.value = e.rate || "";
       refs.days.value = e.days || "";
+      refs.pfRate.value = e.pfRate || 501.5;
+      refs.fixRateNote.value = e.fixRateNote || "";
+      refs.productivityScore.value = e.productivityScore || 0;
+      refs.housekeepingScore.value = e.housekeepingScore || 0;
+      refs.qualityScore.value = e.qualityScore || 0;
+      refs.safetyScore.value = e.safetyScore || 0;
+      refs.performancePoints.value = e.performancePoints || 0;
+      refs.performanceBonus.value = e.performanceBonus || "";
       refs.pan.value = e.pan || "";
       refs.uan.value = e.uan || "";
       refs.bankAccount.value = e.bankAccount || "";
@@ -1042,6 +1148,13 @@
       refs.tea.value = e.teaDays || 0;
       refs.breakfast.value = e.breakfastDays || 0;
       refs.lunch.value = e.lunchDays || 0;
+      refs.lwf.value = e.lwf || 0;
+      refs.advance.value = e.advance || 0;
+      refs.companySalaryAdvance.value = e.companySalaryAdvance || 0;
+      refs.safetyDeduction.value = e.safetyDeduction || 0;
+      refs.otherDeduction.value = e.otherDeduction || 0;
+      refs.siteName.value = e.siteName || "GARADHIA";
+      updatePerformancePreview();
       toggleCanteenUI();
       refs.saveBtn.textContent = index >= 0 ? "Update Employee Record" : "Save Employee Record";
       window.scrollTo({ top: refs.employeeForm.offsetTop - 90, behavior: "smooth" });
@@ -1075,7 +1188,7 @@
 
     function formatINR(amount) {
       const value = Number.isFinite(Number(amount)) ? Number(amount) : 0;
-      return "₹ " + value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return "INR " + value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function money(amount) {
@@ -1102,20 +1215,37 @@
     }
 
     function computeSalaryDetails(raw) {
-      const gross = round2(raw.rate * raw.days);
-      const basic = round2(gross * 0.5);
-      const hra = round2(gross * 0.2);
-      const allowance = round2(gross * 0.3);
-      const pfEmployee = raw.pfEnabled ? round2(basic * 0.12) : 0;
-      const esiEmployee = raw.esiEnabled && gross <= 21000 ? round2(gross * 0.0075) : 0;
+      const rate = Number(raw.rate) || 0;
+      const days = Number(raw.days) || 0;
+      const pfRate = Number(raw.pfRate) || 501.5;
+      const baseWages = round0(rate * days);
+      const pfWages = round0(pfRate * days);
+      const otherAllowance = round0(Math.max(0, rate - pfRate) * days);
+      const productivityScore = Number(raw.productivityScore) || 0;
+      const housekeepingScore = Number(raw.housekeepingScore) || 0;
+      const qualityScore = Number(raw.qualityScore) || 0;
+      const safetyScore = Number(raw.safetyScore) || 0;
+      const performancePoints = round2(productivityScore + housekeepingScore + qualityScore + safetyScore);
+      const performanceDivisor = /12\s*hrs?/i.test(String(raw.fixRateNote || "")) ? 12 : 8;
+      const performanceBonus = round0(rate * performancePoints / performanceDivisor);
+      const gross = round0(pfWages + otherAllowance + performanceBonus);
+      const basic = pfWages;
+      const allowance = otherAllowance;
+      const hra = 0;
+      const pfEmployee = raw.pfEnabled ? round0(pfWages * 0.12) : 0;
+      const esiEmployee = raw.esiEnabled ? round0(gross * 0.0075) : 0;
       const professionalTax = raw.ptEnabled && gross > 12000 ? 200 : 0;
-      const canteenMeals = raw.canteenEnabled ? raw.teaDays + raw.breakfastDays + raw.lunchDays : 0;
-      const canteenDeduction = round2(canteenMeals * 25);
-      const totalDeductions = round2(pfEmployee + esiEmployee + professionalTax + canteenDeduction);
-      const netSalary = round2(gross - totalDeductions);
-      const pfEmployer = raw.pfEnabled ? round2(basic * 0.12) : 0;
-      const esiEmployer = raw.esiEnabled && gross <= 21000 ? round2(gross * 0.0325) : 0;
-      return { basic, hra, allowance, gross, pfEmployee, esiEmployee, professionalTax, canteenDeduction, totalDeductions, netSalary, pfEmployer, esiEmployer };
+      const canteenDeduction = raw.canteenEnabled ? round2((Number(raw.teaDays) || 0) + (Number(raw.breakfastDays) || 0) + (Number(raw.lunchDays) || 0)) : 0;
+      const lwf = Number(raw.lwf) || 0;
+      const advance = Number(raw.advance) || 0;
+      const companySalaryAdvance = Number(raw.companySalaryAdvance) || 0;
+      const safetyDeduction = Number(raw.safetyDeduction) || 0;
+      const otherDeduction = Number(raw.otherDeduction) || 0;
+      const totalDeductions = round2(pfEmployee + esiEmployee + professionalTax + lwf + canteenDeduction + advance + companySalaryAdvance + safetyDeduction + otherDeduction);
+      const netSalary = round0(gross - totalDeductions);
+      const pfEmployer = raw.pfEnabled ? round2(pfWages * 0.13) : 0;
+      const esiEmployer = raw.esiEnabled ? round2(gross * 0.0325) : 0;
+      return { baseWages, pfWages, basic, hra, allowance, performancePoints, performanceBonus, gross, pfEmployee, esiEmployee, professionalTax, canteenDeduction, lwf, advance, companySalaryAdvance, safetyDeduction, otherDeduction, totalDeductions, netSalary, pfEmployer, esiEmployer };
     }
 
     function salarySnapshot(emp) {
@@ -1123,19 +1253,36 @@
         ...emp,
         rate: Number(emp.rate) || 0,
         days: Number(emp.days) || 0,
+        pfRate: Number(emp.pfRate) || 501.5,
+        fixRateNote: emp.fixRateNote || "",
+        productivityScore: Number(emp.productivityScore) || 0,
+        housekeepingScore: Number(emp.housekeepingScore) || 0,
+        qualityScore: Number(emp.qualityScore) || 0,
+        safetyScore: Number(emp.safetyScore) || 0,
+        performanceBonus: Number(emp.performanceBonus) || 0,
         teaDays: Number(emp.teaDays) || 0,
         breakfastDays: Number(emp.breakfastDays) || 0,
         lunchDays: Number(emp.lunchDays) || 0,
+        lwf: Number(emp.lwf) || 0,
+        advance: Number(emp.advance) || 0,
+        companySalaryAdvance: Number(emp.companySalaryAdvance) || 0,
+        safetyDeduction: Number(emp.safetyDeduction) || 0,
+        otherDeduction: Number(emp.otherDeduction) || 0,
+        siteName: emp.siteName || "GARADHIA",
         pfEnabled: Boolean(emp.pfEnabled),
         esiEnabled: Boolean(emp.esiEnabled),
         ptEnabled: emp.ptEnabled !== false,
         canteenEnabled: Boolean(emp.canteenEnabled)
       };
-      return { ...emp, ...computeSalaryDetails(raw) };
+      return { ...emp, ...raw, ...computeSalaryDetails(raw) };
     }
 
     function round2(value) {
       return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+    }
+
+    function round0(value) {
+      return Math.round(Number(value) || 0);
     }
 
     function getFormEmployee() {
@@ -1146,6 +1293,11 @@
       const name = refs.name.value.trim();
       const rate = Number.parseFloat(refs.rate.value);
       const days = Number.parseFloat(refs.days.value);
+      const pfRate = Math.max(0, Number.parseFloat(refs.pfRate.value) || 501.5);
+      const productivityScore = Math.max(0, Number.parseFloat(refs.productivityScore.value) || 0);
+      const housekeepingScore = Math.max(0, Number.parseFloat(refs.housekeepingScore.value) || 0);
+      const qualityScore = Math.max(0, Number.parseFloat(refs.qualityScore.value) || 0);
+      const safetyScore = Math.max(0, Number.parseFloat(refs.safetyScore.value) || 0);
 
       if (!company) return fail("Please provide a company name.");
       if (!empId || !name) return fail("Employee ID and name are required.");
@@ -1163,13 +1315,25 @@
         bankAccount: refs.bankAccount.value.trim(),
         rate,
         days,
+        pfRate,
+        fixRateNote: refs.fixRateNote.value.trim(),
+        productivityScore,
+        housekeepingScore,
+        qualityScore,
+        safetyScore,
         pfEnabled: refs.pfToggle.checked,
         esiEnabled: refs.esiToggle.checked,
         ptEnabled: refs.ptToggle.checked,
         canteenEnabled: refs.canteenToggle.checked,
-        teaDays: Math.max(0, Number.parseInt(refs.tea.value, 10) || 0),
-        breakfastDays: Math.max(0, Number.parseInt(refs.breakfast.value, 10) || 0),
-        lunchDays: Math.max(0, Number.parseInt(refs.lunch.value, 10) || 0),
+        teaDays: Math.max(0, Number.parseFloat(refs.tea.value) || 0),
+        breakfastDays: Math.max(0, Number.parseFloat(refs.breakfast.value) || 0),
+        lunchDays: Math.max(0, Number.parseFloat(refs.lunch.value) || 0),
+        lwf: Math.max(0, Number.parseFloat(refs.lwf.value) || 0),
+        advance: Math.max(0, Number.parseFloat(refs.advance.value) || 0),
+        companySalaryAdvance: Math.max(0, Number.parseFloat(refs.companySalaryAdvance.value) || 0),
+        safetyDeduction: Math.max(0, Number.parseFloat(refs.safetyDeduction.value) || 0),
+        otherDeduction: Math.max(0, Number.parseFloat(refs.otherDeduction.value) || 0),
+        siteName: refs.siteName.value || "GARADHIA",
         createdAt: editIndex >= 0 ? employees[editIndex].createdAt : new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -1203,14 +1367,28 @@
       editIndex = -1;
       refs.employeeForm.reset();
       refs.month.value = monthKeyToLabel(currentMonthKey);
+      refs.pfRate.value = "501.5";
+      refs.productivityScore.value = "0";
+      refs.housekeepingScore.value = "0";
+      refs.qualityScore.value = "0";
+      refs.safetyScore.value = "0";
+      refs.performancePoints.value = "0";
+      refs.performanceBonus.value = "0";
       refs.esiToggle.checked = true;
       refs.ptToggle.checked = true;
       refs.tea.value = "0";
       refs.breakfast.value = "0";
       refs.lunch.value = "0";
+      refs.lwf.value = "0";
+      refs.advance.value = "0";
+      refs.companySalaryAdvance.value = "0";
+      refs.safetyDeduction.value = "0";
+      refs.otherDeduction.value = "0";
+      refs.siteName.value = "GARADHIA";
       refs.saveBtn.textContent = "Save Employee Record";
       refs.canteenSection.classList.add("hidden");
       handleCompanyChange();
+      updatePerformancePreview();
       if (shouldFocus) refs.month.focus();
     }
 
@@ -1240,7 +1418,7 @@
       refs.recordCount.textContent = `${employees.length} ${employees.length === 1 ? "record" : "records"}`;
 
       if (!employees.length) {
-        refs.tableBody.innerHTML = `<tr class="empty-row"><td colspan="9">No employees yet. Add salary data to begin.</td></tr>`;
+        refs.tableBody.innerHTML = `<tr class="empty-row"><td colspan="10">No employees yet. Add salary data to begin.</td></tr>`;
         return;
       }
 
@@ -1254,6 +1432,7 @@
           <td>${escapeHtml(emp.company)}</td>
           <td>${escapeHtml(emp.designation || "-")}</td>
           <td class="amount text-emerald-300">${formatINR(emp.gross)}</td>
+          <td class="amount text-sky-200">${formatINR(emp.performanceBonus)}</td>
           <td class="amount text-slate-300">${formatINR(emp.professionalTax)}</td>
           <td class="amount text-amber-300">${formatINR(emp.totalDeductions)}</td>
           <td class="amount font-bold text-sky-300">${formatINR(emp.netSalary)}</td>
@@ -1292,7 +1471,6 @@
         const type = logoBase64.includes("image/jpeg") ? "JPEG" : "PNG";
         doc.addImage(logoBase64, type, x, y, width, height);
       } catch {
-        // Ignore malformed or unsupported image data.
       }
     }
 
@@ -1306,181 +1484,200 @@
       const contentWidth = pageWidth - margin * 2;
       const navy = [15, 23, 42];
       const slate = [71, 85, 105];
-      const line = [203, 213, 225];
+      const ink = [17, 24, 39];
+      const line = [218, 226, 236];
       const soft = [248, 250, 252];
       const green = [22, 101, 52];
+      const lightGreen = [240, 253, 244];
+      const lightRed = [254, 242, 242];
 
-      const sectionLabel = (label, x, y, width) => {
-        doc.setFillColor(...navy);
+      const title = (label, x, y, width) => {
+        doc.setFillColor(241, 245, 249);
         doc.rect(x, y, width, 8, "F");
-        doc.setTextColor(255, 255, 255);
+        doc.setDrawColor(...line);
+        doc.line(x, y + 8, x + width, y + 8);
+        doc.setTextColor(...navy);
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(9.5);
-        doc.text(label.toUpperCase(), x + 3, y + 5.5);
+        doc.setFontSize(8.5);
+        doc.text(label.toUpperCase(), x + 3, y + 5.4);
       };
 
+      const tableTheme = {
+        theme: "grid",
+        styles: {
+          fontSize: 8.4,
+          cellPadding: { top: 2.6, right: 2.8, bottom: 2.6, left: 2.8 },
+          lineColor: line,
+          lineWidth: 0.12,
+          textColor: ink,
+          overflow: "linebreak"
+        },
+        margin: { left: margin, right: margin }
+      };
+
+      doc.setFillColor(255, 255, 255);
+      doc.rect(0, 0, pageWidth, pageHeight, "F");
       doc.setDrawColor(...line);
-      doc.setLineWidth(0.35);
+      doc.setLineWidth(0.25);
       doc.rect(margin, 10, contentWidth, pageHeight - 20);
 
       doc.setFillColor(...navy);
-      doc.rect(margin, 10, contentWidth, 32, "F");
-      addLogo(doc, margin + 4, 16, 20, 14);
+      doc.rect(margin, 10, contentWidth, 30, "F");
+      addLogo(doc, margin + 5, 17, 18, 12);
 
       doc.setTextColor(255, 255, 255);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(16);
-      doc.text(companySettings.name || emp.company || "Company", logoBase64 ? margin + 29 : margin + 5, 22);
+      doc.setFontSize(15);
+      doc.text(companySettings.name || emp.company || "Company", logoBase64 ? margin + 28 : margin + 5, 21, { maxWidth: 94 });
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(8);
-      doc.text(companySettings.address || "", logoBase64 ? margin + 29 : margin + 5, 28, { maxWidth: 95 });
-      doc.text([companySettings.phone, companySettings.email].filter(Boolean).join(" | "), logoBase64 ? margin + 29 : margin + 5, 34, { maxWidth: 95 });
+      doc.setFontSize(7.6);
+      doc.text(companySettings.address || "", logoBase64 ? margin + 28 : margin + 5, 27, { maxWidth: 96 });
+      doc.text([companySettings.phone, companySettings.email].filter(Boolean).join(" | "), logoBase64 ? margin + 28 : margin + 5, 34, { maxWidth: 96 });
 
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(20);
-      doc.text("SALARY SLIP", pageWidth - margin - 5, 24, { align: "right" });
+      doc.setFontSize(17);
+      doc.text("SALARY SLIP", pageWidth - margin - 5, 22, { align: "right" });
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(9);
-      doc.text(emp.month || "-", pageWidth - margin - 5, 32, { align: "right" });
+      doc.setFontSize(8.8);
+      doc.text(emp.month || "-", pageWidth - margin - 5, 30, { align: "right" });
+      doc.text(emp.siteName || "", pageWidth - margin - 5, 35, { align: "right" });
 
-      doc.setDrawColor(...line);
-      doc.setFillColor(...soft);
-      doc.rect(margin, 46, contentWidth, 14, "FD");
-      doc.setTextColor(...slate);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(8);
-      doc.text("PAY PERIOD", margin + 4, 52);
-      doc.text("EMPLOYEE ID", margin + 66, 52);
-      doc.text("DEPARTMENT", margin + 124, 52);
-      doc.setTextColor(20, 28, 42);
-      doc.setFontSize(9);
-      doc.text(emp.month || "-", margin + 4, 57);
-      doc.text(emp.empId || "-", margin + 66, 57);
-      doc.text(emp.department || "-", margin + 124, 57, { maxWidth: 55 });
-
-      sectionLabel("Employee Details", margin, 67, contentWidth);
       doc.autoTable({
-        startY: 75,
+        startY: 47,
         body: [
-          ["Employee Name", emp.name || "-", "Company", emp.company || "-"],
-          ["Designation", emp.designation || "-", "PAN", emp.pan || "-"],
-          ["UAN", emp.uan || "-", "Bank Account", emp.bankAccount || "-"]
+          ["Employee", emp.name || "-", "Employee ID", emp.empId || "-"],
+          ["Company", emp.company || "-", "Department", emp.department || "-"],
+          ["Designation", emp.designation || "-", "Pay Period", emp.month || "-"],
+          ["UAN", emp.uan || "-", "Bank A/c", emp.bankAccount || "-"]
         ],
-        theme: "grid",
-        styles: { fontSize: 9, cellPadding: 3.2, lineColor: line, lineWidth: 0.15, textColor: [20, 28, 42] },
+        ...tableTheme,
+        tableWidth: contentWidth,
         columnStyles: {
-          0: { fontStyle: "bold", fillColor: soft, cellWidth: 34 },
-          1: { cellWidth: 61 },
-          2: { fontStyle: "bold", fillColor: soft, cellWidth: 32 },
-          3: { cellWidth: contentWidth - 127 }
-        },
-        margin: { left: margin, right: margin },
-        tableWidth: contentWidth
+          0: { cellWidth: 28, fontStyle: "bold", fillColor: soft, textColor: slate },
+          1: { cellWidth: 70 },
+          2: { cellWidth: 28, fontStyle: "bold", fillColor: soft, textColor: slate },
+          3: { cellWidth: contentWidth - 126 }
+        }
       });
 
-      const tablesY = doc.lastAutoTable.finalY + 10;
+      const summaryY = doc.lastAutoTable.finalY + 7;
+      const cardGap = 5;
+      const cardWidth = (contentWidth - cardGap * 2) / 3;
+      const summaryCards = [
+        ["DAYS", String(emp.days || 0)],
+        ["RATE", pdfMoney(emp.rate || 0)],
+        ["NET PAY", pdfMoney(emp.netSalary)]
+      ];
+      summaryCards.forEach((card, index) => {
+        const x = margin + index * (cardWidth + cardGap);
+        doc.setDrawColor(...line);
+        doc.setFillColor(index === 2 ? 240 : 248, index === 2 ? 253 : 250, index === 2 ? 244 : 252);
+        doc.rect(x, summaryY, cardWidth, 19, "FD");
+        doc.setTextColor(...slate);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(7.2);
+        doc.text(card[0], x + 4, summaryY + 6);
+        doc.setTextColor(index === 2 ? green[0] : ink[0], index === 2 ? green[1] : ink[1], index === 2 ? green[2] : ink[2]);
+        doc.setFontSize(index === 2 ? 12.5 : 11);
+        doc.text(card[1], x + 4, summaryY + 14);
+      });
+
+      const tablesY = summaryY + 27;
       const gap = 8;
       const boxWidth = (contentWidth - gap) / 2;
+      const deductionsX = margin + boxWidth + gap;
 
-      sectionLabel("Earnings", margin, tablesY, boxWidth);
+      title("Earnings", margin, tablesY, boxWidth);
       doc.autoTable({
         startY: tablesY + 8,
         body: [
-          ["Basic", pdfMoney(emp.basic)],
-          ["HRA", pdfMoney(emp.hra)],
-          ["Allowance", pdfMoney(emp.allowance)],
-          ["Gross Earnings", pdfMoney(emp.gross)]
+          ["Base Wages", pdfMoney(emp.baseWages)],
+          ["PF Wages", pdfMoney(emp.pfWages)],
+          ["Other Allowance", pdfMoney(emp.allowance)],
+          [`Performance Allowance (${emp.performancePoints} pts)`, pdfMoney(emp.performanceBonus)],
+          ["Total Gross", pdfMoney(emp.gross)]
         ],
-        theme: "grid",
-        styles: { fontSize: 9.2, cellPadding: 3.4, lineColor: line, lineWidth: 0.15, textColor: [20, 28, 42] },
-        columnStyles: { 0: { cellWidth: 43 }, 1: { halign: "right", cellWidth: boxWidth - 43 } },
-        bodyStyles: { minCellHeight: 8.5 },
-        didParseCell: (data) => {
-          if (data.row.index === 3) {
-            data.cell.styles.fontStyle = "bold";
-            data.cell.styles.fillColor = [240, 253, 244];
-          }
-        },
+        ...tableTheme,
         margin: { left: margin, right: margin },
-        tableWidth: boxWidth
+        tableWidth: boxWidth,
+        columnStyles: { 0: { cellWidth: 55 }, 1: { halign: "right", cellWidth: boxWidth - 55 } },
+        didParseCell: (data) => {
+          if (data.row.index === 4) {
+            data.cell.styles.fontStyle = "bold";
+            data.cell.styles.fillColor = lightGreen;
+          }
+        }
       });
       const earningsY = doc.lastAutoTable.finalY;
 
-      const deductionsX = margin + boxWidth + gap;
-      sectionLabel("Deductions", deductionsX, tablesY, boxWidth);
+      title("Deductions", deductionsX, tablesY, boxWidth);
       doc.autoTable({
         startY: tablesY + 8,
         body: [
           ["PF Employee", pdfMoney(emp.pfEmployee)],
-          ["ESI Employee", pdfMoney(emp.esiEmployee)],
+          ["ESIC Employee", pdfMoney(emp.esiEmployee)],
           ["Professional Tax", pdfMoney(emp.professionalTax)],
           ["Canteen", pdfMoney(emp.canteenDeduction)],
+          ["Advances", pdfMoney((Number(emp.advance) || 0) + (Number(emp.companySalaryAdvance) || 0))],
+          ["Other Deductions", pdfMoney((Number(emp.lwf) || 0) + (Number(emp.safetyDeduction) || 0) + (Number(emp.otherDeduction) || 0))],
           ["Total Deductions", pdfMoney(emp.totalDeductions)]
         ],
-        theme: "grid",
-        styles: { fontSize: 9.2, cellPadding: 3.4, lineColor: line, lineWidth: 0.15, textColor: [20, 28, 42] },
-        columnStyles: { 0: { cellWidth: 45 }, 1: { halign: "right", cellWidth: boxWidth - 45 } },
-        bodyStyles: { minCellHeight: 8.5 },
-        didParseCell: (data) => {
-          if (data.row.index === 4) {
-            data.cell.styles.fontStyle = "bold";
-            data.cell.styles.fillColor = [254, 242, 242];
-          }
-        },
+        ...tableTheme,
         margin: { left: deductionsX, right: margin },
-        tableWidth: boxWidth
+        tableWidth: boxWidth,
+        columnStyles: { 0: { cellWidth: 55 }, 1: { halign: "right", cellWidth: boxWidth - 55 } },
+        didParseCell: (data) => {
+          if (data.row.index === 6) {
+            data.cell.styles.fontStyle = "bold";
+            data.cell.styles.fillColor = lightRed;
+          }
+        }
       });
 
       const afterTablesY = Math.max(earningsY, doc.lastAutoTable.finalY) + 10;
-      doc.setDrawColor(...line);
-      doc.setFillColor(240, 253, 244);
-      doc.rect(margin, afterTablesY, contentWidth, 22, "FD");
+      doc.setFillColor(...lightGreen);
+      doc.setDrawColor(187, 247, 208);
+      doc.rect(margin, afterTablesY, contentWidth, 24, "FD");
       doc.setTextColor(...green);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(11);
-      doc.text("NET SALARY PAYABLE", margin + 5, afterTablesY + 8);
-      doc.setFontSize(20);
-      doc.text(pdfMoney(emp.netSalary), margin + 5, afterTablesY + 17);
-
-      doc.setTextColor(...slate);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(8);
-      doc.text("Gross minus PF, ESI, Gujarat Professional Tax and canteen deductions, as applicable.", margin + 106, afterTablesY + 8, { maxWidth: 78 });
-      doc.text("Gujarat PT: Nil up to INR 12,000 monthly gross; INR 200 above INR 12,000.", margin + 106, afterTablesY + 16, { maxWidth: 78 });
-
-      const wordsY = afterTablesY + 31;
-      sectionLabel("Amount In Words", margin, wordsY, contentWidth);
-      doc.setDrawColor(...line);
-      doc.rect(margin, wordsY + 8, contentWidth, 17);
-      doc.setTextColor(20, 28, 42);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(8.8);
-      doc.text(numberToWordsINR(emp.netSalary), margin + 4, wordsY + 18, { maxWidth: contentWidth - 8 });
-
-      const noteY = wordsY + 33;
-      doc.setFillColor(...soft);
-      doc.rect(margin, noteY, contentWidth, 14, "FD");
-      doc.setTextColor(...slate);
-      doc.setFontSize(7.8);
-      doc.text("This payslip is generated from payroll records maintained by the organization. Please contact HR for corrections or clarifications.", margin + 4, noteY + 8, { maxWidth: contentWidth - 8 });
-
-      const signY = pageHeight - 44;
-      const signX = margin + 4;
-      const signW = 74;
-      doc.setTextColor(...slate);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(8);
-      doc.text("For " + (companySettings.name || emp.company || "Company"), signX, signY, { maxWidth: signW });
-
-      doc.setTextColor(20, 28, 42);
-      doc.setFont("helvetica", "bold");
       doc.setFontSize(8.5);
-      doc.text("HR / Authorized Signatory", signX, signY + 10);
+      doc.text("NET SALARY PAYABLE", margin + 5, afterTablesY + 7);
+      doc.setFontSize(19);
+      doc.text(pdfMoney(emp.netSalary), margin + 5, afterTablesY + 18);
+      doc.setTextColor(...slate);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.4);
+      doc.text("Wage-sheet calculation: PF wages + other allowance + performance allowance minus statutory and manual deductions.", margin + 100, afterTablesY + 9, { maxWidth: 80 });
+      doc.text("PT: INR 200 when monthly gross is above INR 12,000.", margin + 100, afterTablesY + 17, { maxWidth: 80 });
+
+      const wordsY = afterTablesY + 32;
+      title("Amount In Words", margin, wordsY, contentWidth);
+      doc.setDrawColor(...line);
+      doc.rect(margin, wordsY + 8, contentWidth, 18);
+      doc.setTextColor(...ink);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.6);
+      doc.text(numberToWordsINR(emp.netSalary), margin + 4, wordsY + 19, { maxWidth: contentWidth - 8 });
+
+      const footerY = pageHeight - 46;
+      doc.setTextColor(...slate);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8);
+      doc.text("For " + (companySettings.name || emp.company || "Company"), margin + 4, footerY, { maxWidth: 90 });
+      doc.setDrawColor(...line);
+      doc.line(margin + 4, footerY + 20, margin + 78, footerY + 20);
+      doc.setTextColor(...ink);
+      doc.setFontSize(8.5);
+      doc.text("HR / Authorized Signatory", margin + 4, footerY + 25);
+
+      doc.setTextColor(...slate);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.4);
+      doc.text("This is a system generated salary slip. Please contact HR for corrections or clarifications.", pageWidth - margin - 4, footerY + 7, { align: "right", maxWidth: 86 });
 
       doc.setDrawColor(...line);
       doc.line(margin, pageHeight - 18, pageWidth - margin, pageHeight - 18);
       doc.setTextColor(100, 116, 139);
-      doc.setFont("helvetica", "normal");
       doc.setFontSize(7.2);
       doc.text("System generated salary slip", margin, pageHeight - 12);
       doc.text(`Generated on ${new Date().toLocaleDateString("en-IN")}`, pageWidth - margin, pageHeight - 12, { align: "right" });
@@ -1498,18 +1695,18 @@
       if (!employees.length) return showToast("No employees to include in the payroll register.");
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ orientation: "landscape", unit: "mm" });
-      const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
       const reportEmployees = employees.map(salarySnapshot);
       const totals = reportEmployees.reduce((acc, emp) => {
         acc.gross += Number(emp.gross) || 0;
+        acc.bonus += Number(emp.performanceBonus) || 0;
         acc.deductions += Number(emp.totalDeductions) || 0;
         acc.net += Number(emp.netSalary) || 0;
         acc.pf += Number(emp.pfEmployee) || 0;
         acc.esi += Number(emp.esiEmployee) || 0;
         acc.pt += Number(emp.professionalTax) || 0;
         return acc;
-      }, { gross: 0, deductions: 0, net: 0, pf: 0, esi: 0, pt: 0 });
+      }, { gross: 0, bonus: 0, deductions: 0, net: 0, pf: 0, esi: 0, pt: 0 });
 
       doc.setTextColor(15, 23, 42);
       doc.setFont("helvetica", "bold");
@@ -1523,11 +1720,11 @@
       doc.setFontSize(8);
       doc.text(companySettings.address || "", 15, 29);
       doc.text([companySettings.phone, companySettings.email].filter(Boolean).join(" | "), 15, 34);
-      doc.text("Gujarat PT: Nil up to INR 12,000 monthly gross; INR 200 above INR 12,000.", 15, 39);
+      doc.text("Net salary follows the April 2026 wage sheet: total gross minus PF, ESIC, PT, canteen, advances and other deductions.", 15, 39);
 
       doc.autoTable({
         startY: 46,
-        head: [["ID", "Name", "Company", "Designation", "Month", "Gross", "PF", "ESI", "PT", "Deductions", "Net"]],
+        head: [["ID", "Name", "Company", "Designation", "Month", "Gross", "Bonus", "PF", "ESI", "PT", "Deductions", "Net"]],
         body: reportEmployees.map((e) => [
           e.empId,
           e.name,
@@ -1535,24 +1732,26 @@
           e.designation || "-",
           e.month,
           pdfMoney(e.gross),
+          pdfMoney(e.performanceBonus),
           pdfMoney(e.pfEmployee),
           pdfMoney(e.esiEmployee),
           pdfMoney(e.professionalTax),
           pdfMoney(e.totalDeductions),
           pdfMoney(e.netSalary)
         ]),
-        foot: [["", "", "", "", "TOTAL", pdfMoney(totals.gross), pdfMoney(totals.pf), pdfMoney(totals.esi), pdfMoney(totals.pt), pdfMoney(totals.deductions), pdfMoney(totals.net)]],
+        foot: [["", "", "", "", "TOTAL", pdfMoney(totals.gross), pdfMoney(totals.bonus), pdfMoney(totals.pf), pdfMoney(totals.esi), pdfMoney(totals.pt), pdfMoney(totals.deductions), pdfMoney(totals.net)]],
         theme: "plain",
-        styles: { fontSize: 8, cellPadding: { top: 2.8, right: 4, bottom: 2.8, left: 0 }, textColor: [20, 28, 42] },
+        styles: { fontSize: 7.6, cellPadding: { top: 2.8, right: 3, bottom: 2.8, left: 0 }, textColor: [20, 28, 42] },
         headStyles: { textColor: [15, 23, 42], fontStyle: "bold" },
         footStyles: { textColor: [22, 101, 52], fontStyle: "bold" },
         columnStyles: {
-          5: { cellWidth: 24 },
-          6: { cellWidth: 20 },
-          7: { cellWidth: 20 },
+          5: { cellWidth: 23 },
+          6: { cellWidth: 22 },
+          7: { cellWidth: 18 },
           8: { cellWidth: 18 },
-          9: { cellWidth: 25 },
-          10: { cellWidth: 25 }
+          9: { cellWidth: 16 },
+          10: { cellWidth: 24 },
+          11: { cellWidth: 24 }
         },
         didDrawCell: (data) => {
           if (data.section === "head" || data.section === "foot") {
@@ -1601,6 +1800,33 @@
         refs.companyName.disabled = false;
         if (refs.companyName.value === "Pampashree Infotech") refs.companyName.value = "";
       }
+    }
+
+    function updatePerformancePreview() {
+      const preview = computeSalaryDetails({
+        rate: Number.parseFloat(refs.rate.value) || 0,
+        days: Number.parseFloat(refs.days.value) || 0,
+        pfRate: Number.parseFloat(refs.pfRate.value) || 501.5,
+        fixRateNote: refs.fixRateNote.value,
+        productivityScore: Number.parseFloat(refs.productivityScore.value) || 0,
+        housekeepingScore: Number.parseFloat(refs.housekeepingScore.value) || 0,
+        qualityScore: Number.parseFloat(refs.qualityScore.value) || 0,
+        safetyScore: Number.parseFloat(refs.safetyScore.value) || 0,
+        pfEnabled: refs.pfToggle.checked,
+        esiEnabled: refs.esiToggle.checked,
+        ptEnabled: refs.ptToggle.checked,
+        canteenEnabled: refs.canteenToggle.checked,
+        teaDays: Number.parseFloat(refs.tea.value) || 0,
+        breakfastDays: Number.parseFloat(refs.breakfast.value) || 0,
+        lunchDays: Number.parseFloat(refs.lunch.value) || 0,
+        lwf: Number.parseFloat(refs.lwf.value) || 0,
+        advance: Number.parseFloat(refs.advance.value) || 0,
+        companySalaryAdvance: Number.parseFloat(refs.companySalaryAdvance.value) || 0,
+        safetyDeduction: Number.parseFloat(refs.safetyDeduction.value) || 0,
+        otherDeduction: Number.parseFloat(refs.otherDeduction.value) || 0
+      });
+      refs.performancePoints.value = preview.performancePoints;
+      refs.performanceBonus.value = preview.performanceBonus;
     }
 
     function initializeFirebase() {
@@ -1707,6 +1933,9 @@
       refs.logoutBtn.addEventListener("click", () => auth.signOut());
       refs.companySelect.addEventListener("change", handleCompanyChange);
       refs.canteenToggle.addEventListener("change", toggleCanteenUI);
+      ["rate", "days", "pfRate", "fixRateNote", "productivityScore", "housekeepingScore", "qualityScore", "safetyScore", "tea", "breakfast", "lunch", "lwf", "advance", "companySalaryAdvance", "safetyDeduction", "otherDeduction"].forEach((key) => {
+        refs[key].addEventListener("input", updatePerformancePreview);
+      });
       refs.logoUpload.addEventListener("change", (event) => {
         const file = event.target.files && event.target.files[0];
         if (!file) return;
